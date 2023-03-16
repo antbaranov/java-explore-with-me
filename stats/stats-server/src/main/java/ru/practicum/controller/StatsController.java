@@ -28,6 +28,7 @@ import java.util.List;
 public class StatsController {
 
     private final StatsService statsService;
+    private final StatsMapper statsMapper;
 
     /**
      * Создаёт EndpointHit сохраняя информацию о запросе
@@ -37,7 +38,7 @@ public class StatsController {
     public EndpointHitResponseDto create(@RequestBody @Valid EndpointHitRequestDto endpointHitRequestDto) {
 
         log.info("POST EndpointHit {}", endpointHitRequestDto);
-        return StatsMapper.toEndpointHitResponseDto(statsService.createHit(StatsMapper.toEndpointHit(endpointHitRequestDto)));
+        return statsMapper.toEndpointHitResponseDto(statsService.createHit(statsMapper.toEndpointHit(endpointHitRequestDto)));
     }
 
     /**
@@ -50,6 +51,6 @@ public class StatsController {
             @RequestParam List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         log.info("GET stats start={}, end={}, uris={}, unique={}", start, end, uris, unique);
-        return StatsMapper.toCollectionViewStatsResponseDto(statsService.getStats(start, end, uris, unique));
+        return statsMapper.toCollectionViewStatsResponseDto(statsService.getStats(start, end, uris, unique));
     }
 }
