@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -8,12 +9,9 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-public class BaseClient {
+@RequiredArgsConstructor
+class BaseClient {
     protected final RestTemplate rest;
-
-    public BaseClient(RestTemplate rest) {
-        this.rest = rest;
-    }
 
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
         if (response.getStatusCode().is2xxSuccessful()) {

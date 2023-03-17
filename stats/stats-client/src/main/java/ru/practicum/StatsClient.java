@@ -15,7 +15,6 @@ public class StatsClient extends BaseClient {
 
     private static final String APPLICATION_NAME = "ewm-main-service";
 
-    @Autowired
     public StatsClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(builder
                 .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
