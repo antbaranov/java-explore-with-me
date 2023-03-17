@@ -19,7 +19,6 @@ import ru.practicum.service.StatsService;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.List;
 
 @RestController
 @Validated
