@@ -7,7 +7,6 @@ import ru.practicum.entity.ViewStats;
 import ru.practicum.repository.StatsRepository;
 
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -23,7 +22,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public Collection<ViewStats> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique) {
+    public List<ViewStats> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique) {
         return statsRepository.findStatsByDates(start, end, uris, unique);
     }
 }

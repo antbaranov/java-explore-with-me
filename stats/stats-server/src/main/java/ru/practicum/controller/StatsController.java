@@ -18,7 +18,7 @@ import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
 import java.sql.Timestamp;
-import java.util.Collection;
+import java.util.List;
 import java.util.List;
 
 @RestController
@@ -44,12 +44,12 @@ public class StatsController {
      * Возвращает статистику по посещениям в интервале дат, по списку uri
      */
     @GetMapping("/stats")
-    public Collection<ViewStatsResponseDto> getStats(
+    public List<ViewStatsResponseDto> getStats(
             @RequestParam Timestamp start,
             @RequestParam Timestamp end,
             @RequestParam List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         log.info("GET stats start={}, end={}, uris={}, unique={}", start, end, uris, unique);
-        return statsMapper.toCollectionViewStatsResponseDto(statsService.getStats(start, end, uris, unique));
+        return statsMapper.toListViewStatsResponseDto(statsService.getStats(start, end, uris, unique));
     }
 }

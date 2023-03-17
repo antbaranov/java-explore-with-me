@@ -7,7 +7,7 @@ import ru.practicum.dto.ViewStatsResponseDto;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.entity.ViewStats;
 
-import java.util.Collection;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface StatsMapper {
@@ -15,7 +15,7 @@ public interface StatsMapper {
 
     EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit entity);
 
-    Collection<ViewStatsResponseDto> toCollectionViewStatsResponseDto(Collection<ViewStats> viewStatsCollection);
+    List<ViewStatsResponseDto> toListViewStatsResponseDto(List<ViewStats> viewStatsList);
 
     ViewStatsResponseDto toViewStatsResponseDto(ViewStats viewStats);
 }

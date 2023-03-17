@@ -6,7 +6,6 @@ import ru.practicum.entity.EndpointHit;
 import ru.practicum.entity.ViewStats;
 
 import java.sql.Timestamp;
-import java.util.Collection;
 import java.util.List;
 
 public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
@@ -17,5 +16,5 @@ public interface StatsRepository extends JpaRepository<EndpointHit, Long> {
             "WHERE e.timestamp BETWEEN :start AND :end AND e.uri IN (:uris) " +
             "GROUP BY e.app, e.uri " +
             "ORDER BY COUNT(e.ip) DESC")
-    Collection<ViewStats> findStatsByDates(Timestamp start, Timestamp end, List<String> uris, boolean unique);
+    List<ViewStats> findStatsByDates(Timestamp start, Timestamp end, List<String> uris, boolean unique);
 }
