@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "144d1ccf-999b-45ac-a135-fc64e981b034",
 		"name": "stats-svc tests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/List/v2.1.0/List.json",
 		"_exporter_id": "23073145"
 	},
 	"item": [
@@ -18,7 +18,7 @@
 							"    const rnd = new RandomUtils();\r",
 							"\r",
 							"    try {\r",
-							"        pm.collectionVariables.set(\"uri\", '/events/1&uris=/events/2');\r",
+							"        pm.ListVariables.set(\"uri\", '/events/1&uris=/events/2');\r",
 							"        let post1 = rnd.getPost();\r",
 							"        let post2 = rnd.getPost();\r",
 							"        post1['uri'] = '/events/1';\r",
@@ -29,7 +29,7 @@
 							"        let source = await api.getPosts(['/events/1', '/events/2']);\r",
 							"        await api.addPost(post1);\r",
 							"        await api.addPost(post2);\r",
-							"        pm.collectionVariables.set('source', source);\r",
+							"        pm.ListVariables.set('source', source);\r",
 							"        \r",
 							"    } catch(err) {\r",
 							"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
@@ -65,7 +65,7 @@
 							"});\r",
 							"\r",
 							"const target = pm.response.json();\r",
-							"const source = pm.collectionVariables.get('source');\r",
+							"const source = pm.ListVariables.get('source');\r",
 							"\r",
 							"\r",
 							"pm.test(\"Посты должны содержать поля: app, uri, hits\", function () {\r",

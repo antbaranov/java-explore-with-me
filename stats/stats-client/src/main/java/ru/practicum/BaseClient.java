@@ -1,6 +1,7 @@
 package ru.practicum;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Objects;
 
-@RequiredArgsConstructor
-class BaseClient {
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+public class BaseClient {
     protected final RestTemplate rest;
 
     private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
