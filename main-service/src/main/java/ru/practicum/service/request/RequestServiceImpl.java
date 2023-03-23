@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,9 +44,9 @@ public class RequestServiceImpl implements RequestService {
         // По тестам если тут ivent не найден должно возвращаться 409, а не 404
         Event event = eventService.getByIdForRequest(eventId).orElseThrow(
                 () -> new AccessException("Invalid request"));
-        if (event.getInitiator().getId() == userId
+        if ((Objects.equals(event.getInitiator().getId(), userId))
                 || !event.getState().equals(State.PUBLISHED)
-                || event.getConfirmedRequests() >= event.getParticipantLimit()) {
+                || (event.getConfirmedRequests() >= event.getParticipantLimit())) {
             throw new AccessException("Invalid request");
         }
         Request newRequest = Request.builder()
@@ -83,7 +84,7 @@ public class RequestServiceImpl implements RequestService {
         List<Request> requestsForUpdate = new ArrayList<>();
 
         for (Request request : requests) {
-            if (eventId != request.getEvent().getId()) {
+            if (!(Objects.equals(request.getEvent().getId(), eventId))) {
                 throw new AccessException("Incorrect event");
             }
             /**
