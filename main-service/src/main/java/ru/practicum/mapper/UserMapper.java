@@ -1,7 +1,10 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.dto.user.*;
+import ru.practicum.dto.user.UserDto;
+import ru.practicum.dto.user.UserIncomeDto;
+import ru.practicum.dto.user.UserResponseDto;
+import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.entity.User;
 
 import java.util.List;
@@ -10,6 +13,7 @@ import java.util.List;
 public interface UserMapper {
 
     User toUser(UserIncomeDto userIncomeDto);
+
     UserDto toUserDto(User user);
 
     static UserShortDto toUserShortDto(User user) {
