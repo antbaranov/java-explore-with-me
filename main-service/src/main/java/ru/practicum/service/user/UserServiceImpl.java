@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserIncomeDto;
+import ru.practicum.dto.user.UserResponseDto;
 import ru.practicum.entity.User;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.UserMapper;
@@ -33,8 +34,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers(List<Long> ids, int from, int size) {
-        return userRepository.findByIdIn(ids, PageRequest.of(from, size));
+    public List<UserResponseDto> getUsers(List<Long> ids, int from, int size) {
+        List<User> users;
+        users = userRepository.findByIdIn(ids, PageRequest.of(from, size));
+        return userMapper.toUserResponseDtoList(users);
     }
 
     @Override

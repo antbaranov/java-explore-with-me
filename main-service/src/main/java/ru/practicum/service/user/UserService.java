@@ -12,7 +12,7 @@ public interface UserService {
 
     UserDto create(UserIncomeDto userIncomeDto);
 
-    List<User> getUsers(List<Long> ids, int from, int size);
+    List<UserResponseDto> getUsers(List<Long> ids, int from, int size);
 
     User getById(Long userId);
 

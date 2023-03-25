@@ -11,7 +11,6 @@ public interface UserMapper {
 
     User toUser(UserIncomeDto userIncomeDto);
     UserDto toUserDto(User user);
-    UserResponseDto toUserResponseDto(User user);
 
     static UserShortDto toUserShortDto(User user) {
         return UserShortDto.builder()
