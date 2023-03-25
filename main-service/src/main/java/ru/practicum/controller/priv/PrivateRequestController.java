@@ -56,7 +56,7 @@ public class PrivateRequestController {
     @PatchMapping("{requestId}/cancel")
     public ParticipationRequestDto cancelRequest(@PathVariable @Min(0) Long userId,
                                                  @PathVariable @Min(0) Long requestId) {
-        log.info("Patch requests by userId={} for requestId", userId, requestId);
+        log.info("Patch requests by userId={} for requestId={}", userId, requestId);
         return RequestMapper.toParticipationRequestDto(requestService.cancelRequest(userId, requestId));
     }
 }

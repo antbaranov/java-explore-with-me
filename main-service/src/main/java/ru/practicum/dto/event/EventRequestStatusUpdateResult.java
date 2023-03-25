@@ -15,6 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 public class EventRequestStatusUpdateResult {
 
-    List<Request> confirmedRequests = new ArrayList<Request>();
-    List<Request> rejectedRequests = new ArrayList<Request>();
+    private List<Request> confirmedRequests = new ArrayList<Request>();
+    private List<Request> rejectedRequests = new ArrayList<Request>();
 }

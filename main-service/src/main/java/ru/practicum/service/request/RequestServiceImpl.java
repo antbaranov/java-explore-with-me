@@ -87,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
             if (!(Objects.equals(request.getEvent().getId(), eventId))) {
                 throw new AccessException("Incorrect event");
             }
-            /**
+            /*
              Нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие
              (Ожидается код ошибки 409)
              если при подтверждении данной заявки, лимит заявок для события исчерпан,

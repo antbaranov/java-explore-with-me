@@ -21,7 +21,7 @@ import static ru.practicum.util.Constants.DATE_TIME;
 @NotNull
 public class EventShortDto {
 
-    public Long id;
+    private Long id;
     @NotNull
     @Size(min = 20, max = 2000)
     private String annotation;

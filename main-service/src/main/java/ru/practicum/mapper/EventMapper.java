@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class EventMapper {
 
     private final LocationMapper locationMapper;
-    private final CategoryMapper categoryMapper;
 
     public static Event toEvent(NewEventDto dto) {
         return Event.builder()

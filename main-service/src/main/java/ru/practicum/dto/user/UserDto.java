@@ -1,10 +1,6 @@
 package ru.practicum.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -14,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 @NonNull
-public class NewUserDto {
+public class UserDto {
     @NotBlank
     private String name;
     @NotBlank

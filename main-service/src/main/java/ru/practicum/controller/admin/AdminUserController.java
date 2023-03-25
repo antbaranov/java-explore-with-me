@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.user.NewUserDto;
+import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserResponseDto;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.service.user.UserService;
@@ -36,6 +37,7 @@ public class AdminUserController {
     /**
      * Добавление нового пользователя
      */
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDto create(@Valid @RequestBody NewUserDto newUserDto) {

@@ -22,8 +22,8 @@ import static ru.practicum.util.Constants.DATE_TIME;
 @NoArgsConstructor
 public class EventFullDto {
 
-    public Long id;
-    LocationResponseDto location;
+    private Long id;
+    private LocationResponseDto location;
     private String annotation;
     private CategoryResponseDto category;
     private Integer confirmedRequests;
