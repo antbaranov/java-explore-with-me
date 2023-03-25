@@ -1,5 +1,7 @@
 package ru.practicum.service.compilation;
 
+import ru.practicum.dto.compliiation.CompilationDto;
+import ru.practicum.dto.compliiation.NewCompilationDto;
 import ru.practicum.entity.Compilation;
 
 import java.util.List;
@@ -8,9 +10,10 @@ public interface CompilationService {
 
     List<Compilation> getAll(boolean pinned, int from, int size);
 
-    Compilation create(Compilation toCompilation);
+    CompilationDto create(NewCompilationDto toCompilation);
 
-    Compilation update(Long compId, Compilation compilation);
+
+    CompilationDto update(Long compId, NewCompilationDto compilation);
 
     void delete(Long compId);
 

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.dto.compliiation.CompilationDto;
+import ru.practicum.dto.compliiation.NewCompilationDto;
 import ru.practicum.entity.Compilation;
 import ru.practicum.entity.Event;
 import ru.practicum.exception.NotFoundException;
@@ -23,26 +25,31 @@ public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventService eventService;
 
+    private final CompilationMapper compilationMapper;
+
     @Override
     public List<Compilation> getAll(boolean pinned, int from, int size) {
         return compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size));
     }
 
     @Override
-    public Compilation create(Compilation compilation) {
+    public CompilationDto create(NewCompilationDto dto) {
+        Compilation compilation = CompilationMapper.toCompilation(dto);
         compilation.setEvents(new HashSet<>(eventService.getAll(
                 compilation.getEvents().stream()
                         .map(Event::getId)
                         .collect(Collectors.toList())
         )));
 
-        return compilationRepository.save(compilation);
+        return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
     }
 
     @Override
-    public Compilation update(Long compId, Compilation compilation) {
+    public CompilationDto update(Long compId, NewCompilationDto dto) {
+        Compilation compilation = CompilationMapper.toCompilation(dto);
         Compilation recipient = getById(compId);
-        return compilationRepository.save(CompilationMapper.update(recipient, compilation));
+        return compilationMapper.toCompilationDto(
+                compilationRepository.save(CompilationMapper.update(recipient, compilation)));
     }
 
     @Override
