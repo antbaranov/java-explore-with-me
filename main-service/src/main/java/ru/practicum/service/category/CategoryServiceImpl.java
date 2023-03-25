@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.dto.category.CategoryResponseDto;
+import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.entity.Category;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.repository.CategoryRepository;
 
 import java.util.List;
@@ -17,10 +20,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    @Override
-    public Category create(Category category) {
+    private final CategoryMapper categoryMapper;
 
-        return categoryRepository.save(category);
+    @Override
+    public CategoryResponseDto create(NewCategoryDto newCategoryDto) {
+        Category category = categoryMapper.toCategory(newCategoryDto);
+        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
     }
 
     @Override
@@ -30,9 +35,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category update(Long catId, Category category) {
+    public CategoryResponseDto update(Long catId, NewCategoryDto newCategoryDto) {
+        Category category = categoryMapper.toCategory(newCategoryDto);
         category.setId(catId);
-        return categoryRepository.save(category);
+        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
     }
 
     @Override

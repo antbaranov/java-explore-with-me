@@ -4,17 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.category.NewCategoryDto;
-import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.service.category.CategoryService;
 
 import javax.validation.Valid;
@@ -29,8 +21,6 @@ public class AdminCategoryController {
 
     private final CategoryService categoryService;
 
-    private final CategoryMapper categoryMapper;
-
     /**
      * Добавление новой категории
      */
@@ -38,8 +28,7 @@ public class AdminCategoryController {
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryResponseDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
         log.info("Create {}", newCategoryDto.toString());
-        return CategoryMapper.toCategoryResponseDto(
-                categoryService.create(categoryMapper.toCategory(newCategoryDto)));
+        return categoryService.create(newCategoryDto);
     }
 
     /**
@@ -60,7 +49,6 @@ public class AdminCategoryController {
     public CategoryResponseDto update(@Valid @RequestBody NewCategoryDto newCategoryDto,
                                       @PathVariable @Min(0) Long catId) {
         log.info("Update by id={}, for {}", catId, newCategoryDto.toString());
-        return CategoryMapper.toCategoryResponseDto(
-                categoryService.update(catId, categoryMapper.toCategory(newCategoryDto)));
+        return categoryService.update(catId, newCategoryDto);
     }
 }

@@ -78,7 +78,7 @@ public class EventServiceImpl implements EventService {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return EventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories,
+        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories,
                 rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
@@ -141,7 +141,7 @@ public class EventServiceImpl implements EventService {
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
 
-        return EventMapper.toEventFullDto(save(recipient));
+        return eventMapper.toEventFullDto(save(recipient));
     }
 
     // По тестам если ивент не найден для запроса возвращаться 409, а не 404

@@ -11,7 +11,7 @@ import java.util.List;
 public interface CategoryMapper {
 
     Category toCategory(NewCategoryDto dto);
-   // CategoryResponseDto toCategoryResponseDto(Category category);
+//    CategoryResponseDto toCategoryResponseDto(Category category);
 
     static CategoryResponseDto toCategoryResponseDto(Category category) {
         return CategoryResponseDto.builder()
