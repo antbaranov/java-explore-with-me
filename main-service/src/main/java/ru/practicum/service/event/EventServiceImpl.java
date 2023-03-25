@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.entity.Category;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.Location;
@@ -32,6 +33,8 @@ public class EventServiceImpl implements EventService {
     private final LocationRepository locationRepository;
     private final UserService userService;
     private final CategoryService categoryService;
+
+    private final EventMapper eventMapper;
 
     @Override
     public Event create(Long userId, Event event) {
@@ -70,13 +73,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                           Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventRepository.findByParameters(users, states, categories,
-                rangeStart, rangeEnd, PageRequest.of(from, size));
+        return EventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories,
+                rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
     @Override
@@ -133,12 +136,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event updateByAdmin(Long eventId, Event donor) {
+    public EventFullDto updateByAdmin(Long eventId, Event donor) {
         Event recipient = getById(eventId);
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
 
-        return save(recipient);
+        return EventMapper.toEventFullDto(save(recipient));
     }
 
     // По тестам если ивент не найден для запроса возвращаться 409, а не 404

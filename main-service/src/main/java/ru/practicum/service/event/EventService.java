@@ -1,5 +1,6 @@
 package ru.practicum.service.event;
 
+import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.SortEvent;
 import ru.practicum.entity.State;
@@ -20,7 +21,10 @@ public interface EventService {
 
     List<Event> getAll(List<Long> eventIds);
 
-    List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+   /* List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+                                   Timestamp rangeStart, Timestamp rangeEnd, int from, int size);*/
+
+    List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                    Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
 
     List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
@@ -31,7 +35,8 @@ public interface EventService {
 
     Event getById(Long eventId);
 
-    Event updateByAdmin(Long eventId, Event event);
+    //    Event updateByAdmin(Long eventId, Event event);
+    EventFullDto updateByAdmin(Long eventId, Event event);
 
     Optional<Event> getByIdForRequest(Long eventId);
 }

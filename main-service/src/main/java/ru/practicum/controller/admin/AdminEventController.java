@@ -36,10 +36,8 @@ public class AdminEventController {
      * Редактирование данных события и его статуса (отклонение/публикация)
      */
     @PatchMapping("{eventId}")
-    public EventFullDto update(@PathVariable @Min(0) Long eventId,
-                               @Valid @RequestBody UpdateEventAdminRequest request) {
-        return eventMapper.toEventFullDto(eventService.updateByAdmin(eventId,
-                eventMapper.toEvent(request)));
+    public EventFullDto update(@PathVariable @Min(0) Long eventId, @Valid @RequestBody UpdateEventAdminRequest request) {
+        return eventService.updateByAdmin(eventId, eventMapper.toEvent(request));
     }
 
     /**
@@ -56,7 +54,7 @@ public class AdminEventController {
             @RequestParam(defaultValue = "10", required = false) @Min(1) final int size) {
         log.info("GET events by users={}, states={}, categories={}, rangeStart={}, rangeEnd{}, from={}, size={}",
                 users, states, categories, rangeStart, rangeEnd, from, size);
-        return eventMapper.toEventFullDtoList(eventService.getAllByParameters(users, states, categories,
-                rangeStart, rangeEnd, from, size));
+        return eventService.getAllByParameters(users, states, categories,
+                rangeStart, rangeEnd, from, size);
     }
 }
