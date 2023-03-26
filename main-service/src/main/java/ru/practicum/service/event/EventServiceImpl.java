@@ -59,12 +59,6 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-  /*  @Override
-    public List<Event> getAll(Long userId, int from, int size) {
-        userService.getById(userId);
-        return eventRepository.findAllByInitiatorId(userId, PageRequest.of(from, size));
-    }*/
-
     @Override
     public List<EventShortDto> getAll(Long userId, int from, int size) {
         userService.getById(userId);
@@ -132,10 +126,10 @@ public class EventServiceImpl implements EventService {
 */
 
     @Override
-    public Event getUserEventById(Long eventId, Long userId) {
+    public EventFullDto getUserEventById(Long eventId, Long userId) {
         userService.getById(userId);
-        return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+        return EventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId)));
     }
 
     @Override
@@ -144,10 +138,16 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
+    public Event getUserEventByIdup(Long eventId, Long userId) {
+        userService.getById(userId);
+        return eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+    }
+
     @Override
     public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto) {
         Event donor = EventMapper.toEvent(dto);
-        Event recipient = getUserEventById(eventId, userId);
+        Event recipient = getUserEventByIdup(eventId, userId);
         if (recipient.getState() == State.PUBLISHED) {
             throw new AccessException("Error: event state");
         }

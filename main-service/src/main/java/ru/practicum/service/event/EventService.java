@@ -41,7 +41,9 @@ public interface EventService {
                                                  Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort,
                                                  int from, int size);*/
 
-    Event getUserEventById(Long eventId, Long userId);
+    EventFullDto getUserEventById(Long eventId, Long userId);
+    Event getUserEventByIdup(Long eventId, Long userId);
+
 
     Event getById(Long eventId);
 

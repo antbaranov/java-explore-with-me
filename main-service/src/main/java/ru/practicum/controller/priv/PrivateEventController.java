@@ -93,11 +93,9 @@ public class PrivateEventController {
      * Получение полной информации о событии добавленном текущим пользователем
      */
     @GetMapping("{eventId}")
-    public EventFullDto getUserEvent(
-            @PathVariable @Min(0) Long userId,
-            @PathVariable @Min(0) Long eventId) {
+    public EventFullDto getUserEvent(@PathVariable @Min(0) Long userId, @PathVariable @Min(0) Long eventId) {
         log.info("GET Events by userId={}, eventId={}", userId, eventId);
-        return eventMapper.toEventFullDto(eventService.getUserEventById(eventId, userId));
+        return eventService.getUserEventById(eventId, userId);
     }
 
     /**
