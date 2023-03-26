@@ -34,9 +34,9 @@ public class RequestServiceImpl implements RequestService {
     private final RequestMapper requestMapper;
 
     @Override
-    public List<Request> getAll(Long userId) {
+    public List<ParticipationRequestDto> getAll(Long userId) {
         userService.getById(userId);
-        return requestRepository.findAllByRequesterId(userId);
+        return requestMapper.toParticipationRequestDtoList(requestRepository.findAllByRequesterId(userId));
     }
 
     @Override
@@ -127,16 +127,16 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request cancelRequest(Long userId, Long requestId) {
+    public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         userService.getById(userId);
         Request request = getRequestById(requestId);
         request.setStatus(Status.CANCELED);
-        return requestRepository.save(request);
+        return RequestMapper.toParticipationRequestDto(requestRepository.save(request));
     }
 
     private Request getRequestById(Long requestId) {
-        return requestRepository.findById(requestId).orElseThrow(
-                () -> new NotFoundException("Request with id=" + requestId));
+        return requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Request with id=" + requestId));
     }
 
     private Integer getRequestsByEventByStatus(Long eventId, Status status) {

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface RequestService {
 
-    List<Request> getAll(Long userId);
+    List<ParticipationRequestDto> getAll(Long userId);
 
     ParticipationRequestDto create(Long userId, Long eventId);
 
@@ -18,5 +18,5 @@ public interface RequestService {
     EventRequestStatusUpdateResultDto updateStatus(Long userId, Long eventId,
                                                    EventRequestStatusUpdateRequest requestStatusUpdate);
 
-    Request cancelRequest(Long userId, Long requestId);
+    ParticipationRequestDto cancelRequest(Long userId, Long requestId);
 }
