@@ -2,6 +2,7 @@ package ru.practicum.service.compilation;
 
 import ru.practicum.dto.compliiation.CompilationDto;
 import ru.practicum.dto.compliiation.NewCompilationDto;
+import ru.practicum.entity.Compilation;
 
 import java.util.List;
 
