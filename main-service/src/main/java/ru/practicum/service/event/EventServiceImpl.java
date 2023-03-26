@@ -5,12 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.entity.Category;
-import ru.practicum.entity.Event;
-import ru.practicum.entity.Location;
-import ru.practicum.entity.SortEvent;
-import ru.practicum.entity.State;
-import ru.practicum.entity.User;
+import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.EventMapper;
@@ -73,55 +68,67 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
-                                          Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
+    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories, Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories,
-                rangeStart, rangeEnd, PageRequest.of(from, size)));
+        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
     @Override
-    public List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
-                                                Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
-                                                SortEvent sort, int from, int size) {
+    public List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
         if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
-            return eventRepository.findByParametersForPublicSortEventDate(
-                    text,
-                    categories,
-                    paid,
-                    rangeStart,
-                    rangeEnd,
-                    onlyAvailable,
-                    PageRequest.of(from, size));
+            return eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
         } else {
-            return eventRepository.findByParametersForPublicSortViews(
-                    text,
-                    categories,
-                    paid,
-                    rangeStart,
-                    rangeEnd,
-                    onlyAvailable,
-                    PageRequest.of(from, size));
+            return eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
         }
     }
+/*
+
+    @Override
+    public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
+                                                        Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                        SortEvent sort, int from, int size) {
+        List<Event> events = EventMapper.toEventShortDtoList();
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+        if (text != null) text = text.toLowerCase();
+
+        if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        } else {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        }
+    }
+*/
 
     @Override
     public Event getUserEventById(Long eventId, Long userId) {
         userService.getById(userId);
-        return eventRepository.findByIdAndInitiatorId(eventId, userId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+        return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
     @Override
     public Event getById(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+        return eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
     @Override
@@ -160,7 +167,6 @@ public class EventServiceImpl implements EventService {
     }
 
     private Location getLocation(Location location) {
-        return locationRepository.findByLatAndLon(location.getLat(),
-                location.getLon()).orElse(locationRepository.save(location));
+        return locationRepository.findByLatAndLon(location.getLat(), location.getLon()).orElse(locationRepository.save(location));
     }
 }

@@ -46,7 +46,7 @@ public class PublicEventController {
             @RequestParam(required = false) SortEvent sort,
             @RequestParam(defaultValue = "0") @Min(0) int from,
             @RequestParam(defaultValue = "10") @Min(1) int size, HttpServletRequest request) {
-        log.info("GET events by text={}, categories={}, paid={}, rangeStart={}, rangeEnd{}, " +
+        log.info("GET events by text={}, categories={}, paid={}, rangeStart={}, rangeEnd={}, " +
                         "onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         statsClient.createHit(request);
@@ -59,8 +59,7 @@ public class PublicEventController {
      * Получение информации о категории по её идентификатору
      */
     @GetMapping("{id}")
-    public EventFullDto getById(
-            @PathVariable @Min(0) Long id, HttpServletRequest request) {
+    public EventFullDto getById(@PathVariable @Min(0) Long id, HttpServletRequest request) {
         log.info("GET event by id={}", id);
         statsClient.createHit(request);
         return eventMapper.toEventFullDto(

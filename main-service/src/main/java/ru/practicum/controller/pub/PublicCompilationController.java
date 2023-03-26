@@ -36,8 +36,7 @@ public class PublicCompilationController {
             @PositiveOrZero @RequestParam(defaultValue = "0", required = false) @Min(0) int from,
             @Positive @RequestParam(defaultValue = "10", required = false) @Min(1) int size) {
         log.info("GET compilations pinned={}, from={}, size={}", pinned, from, size);
-        return compilationMapper.toCompilationDtoList(
-                compilationService.getAll(pinned, from, size));
+        return compilationService.getAll(pinned, from, size);
     }
 
     /**

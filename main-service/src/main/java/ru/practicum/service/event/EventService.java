@@ -25,11 +25,15 @@ public interface EventService {
                                    Timestamp rangeStart, Timestamp rangeEnd, int from, int size);*/
 
     List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
-                                   Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
+                                          Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
 
     List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
                                          Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort,
                                          int from, int size);
+
+   /* List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
+                                                 Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort,
+                                                 int from, int size);*/
 
     Event getUserEventById(Long eventId, Long userId);
 

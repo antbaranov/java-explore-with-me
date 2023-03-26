@@ -30,7 +30,8 @@ public class AdminUserController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public UserDto create(@Valid @RequestBody UserIncomeDto userIncomeDto) {
-        return userService.create(userIncomeDto);
+        return
+                userService.create(userIncomeDto);
     }
 
     /**

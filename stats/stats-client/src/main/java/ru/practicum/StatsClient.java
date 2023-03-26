@@ -1,5 +1,6 @@
 package ru.practicum;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -10,8 +11,11 @@ import ru.practicum.dto.EndpointHitRequestDto;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class StatsClient extends BaseClient {
     private static final String APPLICATION_NAME = "ewm-main-service";
 

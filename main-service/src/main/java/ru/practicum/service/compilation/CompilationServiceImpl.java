@@ -28,8 +28,8 @@ public class CompilationServiceImpl implements CompilationService {
     private final CompilationMapper compilationMapper;
 
     @Override
-    public List<Compilation> getAll(boolean pinned, int from, int size) {
-        return compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size));
+    public List<CompilationDto> getAll(boolean pinned, int from, int size) {
+        return compilationMapper.toCompilationDtoList(compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size)));
     }
 
     @Override
