@@ -1,6 +1,7 @@
 package ru.practicum.service.event;
 
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.SortEvent;
 import ru.practicum.entity.State;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface EventService {
 
-    Event create(Long userId, Event event);
+    EventFullDto create(Long userId, NewEventDto dto);
 
     Event save(Event event);
 

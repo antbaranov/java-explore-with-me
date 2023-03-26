@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
@@ -32,7 +33,8 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
 
     @Override
-    public Event create(Long userId, Event event) {
+    public EventFullDto create(Long userId, NewEventDto dto) {
+        Event event = EventMapper.toEvent(dto);
         User user = userService.getById(userId);
         Location location = getLocation(event.getLocation());
         Category category = categoryService.findById(event.getCategory().getId());
@@ -45,8 +47,9 @@ public class EventServiceImpl implements EventService {
         event.setState(State.PENDING);
         event.setViews(0);
 
-        return save(event);
+        return EventMapper.toEventFullDto(save(event));
     }
+
 
     // Запись ивента
     @Override
