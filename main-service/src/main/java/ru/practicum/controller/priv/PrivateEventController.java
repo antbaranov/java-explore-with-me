@@ -72,7 +72,7 @@ public class PrivateEventController {
             @PathVariable @Min(0) Long userId,
             @PathVariable @Min(0) Long eventId,
             @Valid @RequestBody EventRequestStatusUpdateRequest requestStatusUpdate) {
-        log.info("Update requests by userId ={}, eventId={}, for {}", userId, eventId, requestStatusUpdate.toString());
+        log.info("Update requests by userId={}, eventId={}, for {}", userId, eventId, requestStatusUpdate.toString());
         return requestService.updateStatus(userId, eventId, requestStatusUpdate);
 
     }

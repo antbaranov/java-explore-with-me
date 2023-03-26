@@ -6,11 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
-import ru.practicum.entity.Event;
-import ru.practicum.entity.Request;
-import ru.practicum.entity.State;
-import ru.practicum.entity.Status;
-import ru.practicum.entity.User;
+import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.RequestMapper;
@@ -77,60 +73,6 @@ public class RequestServiceImpl implements RequestService {
         return requestRepository.findAllByEventId(eventId);
     }
 
-/*    @Override
-    public EventRequestStatusUpdateResult updateStatus(Long userId, Long eventId,
-                                                       EventRequestStatusUpdateRequest requestStatusUpdate) {
-        userService.getById(userId);
-        var event = eventService.getById(eventId);
-        var requests = requestRepository.findAllById(requestStatusUpdate.getRequestIds());
-
-        var countConfirmations = 0;
-        List<Request> requestsForUpdate = new ArrayList<>();
-
-        for (Request request : requests) {
-            if (!(Objects.equals(request.getEvent().getId(), eventId))) {
-                throw new AccessException("Incorrect event");
-            }
-            *//*
-             Нельзя подтвердить заявку, если уже достигнут лимит по заявкам на данное событие
-             (Ожидается код ошибки 409)
-             если при подтверждении данной заявки, лимит заявок для события исчерпан,
-             то все неподтверждённые заявки необходимо отклонить
-             *//*
-            if (!event.getRequestModeration() || event.getParticipantLimit() == 0
-                    || event.getConfirmedRequests() >= event.getParticipantLimit()
-                    || request.getStatus() != Status.PENDING) {
-                throw new AccessException("Error: confirming request");
-            }
-            if (requestStatusUpdate.getStatus() == Status.CONFIRMED
-                    && (event.getConfirmedRequests() + countConfirmations) < event.getParticipantLimit()) {
-                request.setStatus(Status.CONFIRMED);
-                requestsForUpdate.add(request);
-                countConfirmations++;
-            } else {
-                request.setStatus(Status.REJECTED);
-                requestsForUpdate.add(request);
-            }
-        }
-
-        // Сохраняет все запросы
-        requests = requestRepository.saveAll(requestsForUpdate);
-
-        event.setConfirmedRequests(getRequestsByEventByStatus(event.getId(), Status.CONFIRMED));
-        eventService.save(event);
-
-        EventRequestStatusUpdateResult requestResult = new EventRequestStatusUpdateResult();
-        requestResult.setConfirmedRequests(requests.stream()
-                .filter(r -> r.getStatus() == Status.CONFIRMED)
-                .collect(Collectors.toList()));
-        requestResult.setRejectedRequests(requests.stream()
-                .filter(r -> r.getStatus() == Status.REJECTED)
-                .collect(Collectors.toList()));
-        return requestResult;
-    }*/
-
-
-
     @Override
     public EventRequestStatusUpdateResultDto updateStatus(Long userId, Long eventId,
                                                           EventRequestStatusUpdateRequest requestStatusUpdate) {
@@ -182,7 +124,6 @@ public class RequestServiceImpl implements RequestService {
                 .collect(Collectors.toList()));
         return requestMapper.toEventRequestStatusUpdateResultDto(requestResult);
     }
-
 
     @Override
     public Request cancelRequest(Long userId, Long requestId) {
