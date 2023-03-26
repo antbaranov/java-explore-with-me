@@ -40,7 +40,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public Request create(Long userId, Long eventId) {
+    public ParticipationRequestDto create(Long userId, Long eventId) {
         User user = userService.getById(userId);
         // По тестам если тут ivent не найден должно возвращаться 409, а не 404
         Event event = eventService.getByIdForRequest(eventId).orElseThrow(
@@ -65,7 +65,7 @@ public class RequestServiceImpl implements RequestService {
         event.setConfirmedRequests(getRequestsByEventByStatus(event.getId(), Status.CONFIRMED));
         eventService.save(event);
 
-        return newRequest;
+        return RequestMapper.toParticipationRequestDto(newRequest);
     }
 
     @Override

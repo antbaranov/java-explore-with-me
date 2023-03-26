@@ -4,24 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.dto.event.EventFullDto;
-import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
-import ru.practicum.dto.event.EventShortDto;
-import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventUserRequest;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.event.*;
 import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
 import ru.practicum.dto.request.ParticipationRequestDto;
-import ru.practicum.mapper.EventMapper;
-import ru.practicum.mapper.RequestMapper;
 import ru.practicum.service.event.EventService;
 import ru.practicum.service.request.RequestService;
 
@@ -38,9 +24,6 @@ public class PrivateEventController {
 
     private final EventService eventService;
     private final RequestService requestService;
-    private final RequestMapper requestMapper;
-
-    private final EventMapper eventMapper;
 
     /**
      * Добавление нового события

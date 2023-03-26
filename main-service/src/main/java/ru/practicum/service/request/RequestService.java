@@ -11,7 +11,7 @@ public interface RequestService {
 
     List<Request> getAll(Long userId);
 
-    Request create(Long userId, Long eventId);
+    ParticipationRequestDto create(Long userId, Long eventId);
 
     List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId);
 

@@ -38,7 +38,7 @@ public class PrivateRequestController {
     public ParticipationRequestDto createRequest(@PathVariable @Min(0) Long userId,
                                                  @RequestParam @Min(0) Long eventId) {
         log.info("Create request by userId={} for eventId={}", userId, eventId);
-        return RequestMapper.toParticipationRequestDto(requestService.create(userId, eventId));
+        return requestService.create(userId, eventId);
     }
 
     /**

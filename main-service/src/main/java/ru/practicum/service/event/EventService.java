@@ -22,15 +22,14 @@ public interface EventService {
 
     List<EventShortDto> getAll(Long userId, int from, int size);
 
-//    List<Event> getAll(List<Long> eventIds);
-
     List<Event> getAll(List<Long> eventIds);
 
 
    /* List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                    Timestamp rangeStart, Timestamp rangeEnd, int from, int size);*/
 
-    List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories, Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
+    List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+                                          Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
 
     List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size);
 
