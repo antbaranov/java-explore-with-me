@@ -1,6 +1,8 @@
 package ru.practicum.mapper;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.event.EventFullDto;
@@ -17,12 +19,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class EventMapper {
+//@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface EventMapper {
 
-    private final LocationMapper locationMapper;
 
-    public static Event toEvent(NewEventDto dto) {
+/*    public static Event toEvent(NewEventDto dto) {
         return Event.builder()
                 .annotation(dto.getAnnotation())
                 .category(Category.builder().id(dto.getCategory()).build())
@@ -34,9 +37,11 @@ public class EventMapper {
                 .requestModeration(dto.isRequestModeration())
                 .title(dto.getTitle())
                 .build();
-    }
+    }*/
 
-    public static Event toEvent(UpdateEventUserRequest updateUserDto) {
+    Event toEvent(NewEventDto dto);
+
+/*    public static Event toEvent(UpdateEventUserRequest updateUserDto) {
         Event event = new Event();
         if (updateUserDto.getAnnotation() != null) event.setLocation(
                 LocationMapper.toLocation(updateUserDto.getLocation()));
@@ -59,7 +64,10 @@ public class EventMapper {
         if (updateUserDto.getTitle() != null) event.setTitle(
                 updateUserDto.getTitle());
         return event;
-    }
+    }*/
+
+    Event toEvent(UpdateEventUserRequest updateUserDto);
+/*
 
     public Event toEvent(UpdateEventAdminRequest updateAdminDto) {
         Event event = new Event();
@@ -85,8 +93,11 @@ public class EventMapper {
                 updateAdminDto.getTitle());
         return event;
     }
+*/
 
-    public static EventFullDto toEventFullDto(Event event) {
+    Event toEvent(UpdateEventAdminRequest updateAdminDto);
+
+/*    public static EventFullDto toEventFullDto(Event event) {
         return EventFullDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -105,8 +116,11 @@ public class EventMapper {
                 .title(event.getTitle())
                 .views(event.getViews().intValue())
                 .build();
-    }
+    }*/
 
+    EventFullDto toEventFullDto(Event event);
+
+/*
     public static Event updateEvent(Event donor, Event recipient) {
         if (donor.getAnnotation() != null) recipient.setAnnotation(donor.getAnnotation());
         if (donor.getCategory() != null) recipient.setCategory(donor.getCategory());
@@ -120,8 +134,11 @@ public class EventMapper {
         if (donor.getTitle() != null) recipient.setTitle(donor.getTitle());
         return recipient;
     }
+*/
 
-    public static EventShortDto toEventShortDto(Event event) {
+    Event updateEvent(Event donor, Event recipient);
+
+/*    public static EventShortDto toEventShortDto(Event event) {
         return EventShortDto.builder()
                 .id(event.getId())
                 .annotation(event.getAnnotation())
@@ -133,20 +150,25 @@ public class EventMapper {
                 .title(event.getTitle())
                 .views(event.getViews())
                 .build();
-    }
+    }*/
 
-    public static List<EventShortDto> toEventShortDtoList(List<Event> events) {
+    EventShortDto toEventShortDto(Event event);
+
+/*    public static List<EventShortDto> toEventShortDtoList(List<Event> events) {
         return events.stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
+    }*/
 
-    }
+    List<EventShortDto> toEventShortDtoList(List<Event> events);
 
-    public static List<EventFullDto> toEventFullDtoList(List<Event> events) {
+/*    public static List<EventFullDto> toEventFullDtoList(List<Event> events) {
         return events.stream()
                 .map(EventMapper::toEventFullDto)
                 .collect(Collectors.toList());
-    }
+    }*/
+
+    List<EventFullDto> toEventFullDtoList(List<Event> events);
 
     private static State findState(String str) {
         if (str == null) return null;

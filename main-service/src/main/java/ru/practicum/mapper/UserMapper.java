@@ -16,12 +16,14 @@ public interface UserMapper {
 
     UserDto toUserDto(User user);
 
-    static UserShortDto toUserShortDto(User user) {
+/*    static UserShortDto toUserShortDto(User user) {
         return UserShortDto.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .build();
-    }
+    }*/
+
+    UserShortDto toUserShortDto(User user);
 
     List<UserResponseDto> toUserResponseDtoList(List<User> users);
 }

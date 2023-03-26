@@ -24,7 +24,7 @@ public interface CompilationMapper {
                 .build();
     }*/
 
-    @Mapping(target = "compilation", expression = "java(setCompilation(NewCompilationDto dto))")
+    @Mapping(target = "dto", expression = "java(setCompilation(NewCompilationDto dto))")
     Compilation toCompilation(NewCompilationDto dto);
 
     default Compilation setCompilation(NewCompilationDto dto) {
