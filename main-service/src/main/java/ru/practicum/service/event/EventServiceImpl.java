@@ -138,7 +138,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
-    public Event getUserEventByIdup(Long eventId, Long userId) {
+    public Event getUserEventByIdUpdate(Long eventId, Long userId) {
         userService.getById(userId);
         return eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
@@ -147,7 +147,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto) {
         Event donor = EventMapper.toEvent(dto);
-        Event recipient = getUserEventByIdup(eventId, userId);
+        Event recipient = getUserEventByIdUpdate(eventId, userId);
         if (recipient.getState() == State.PUBLISHED) {
             throw new AccessException("Error: event state");
         }

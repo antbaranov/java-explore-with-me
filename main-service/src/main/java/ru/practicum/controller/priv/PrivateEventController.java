@@ -105,7 +105,6 @@ public class PrivateEventController {
     public List<ParticipationRequestDto> getUserEventRequests(
             @PathVariable @Min(0) Long userId,
             @PathVariable @Min(0) Long eventId) {
-        return requestMapper.toParticipationRequestDtoList(
-                requestService.getEventRequests(userId, eventId));
+        return requestService.getEventRequests(userId, eventId);
     }
 }

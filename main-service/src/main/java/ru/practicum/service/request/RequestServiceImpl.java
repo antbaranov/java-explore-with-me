@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventRequestStatusUpdateRequest;
 import ru.practicum.dto.event.EventRequestStatusUpdateResult;
 import ru.practicum.dto.request.EventRequestStatusUpdateResultDto;
+import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
@@ -68,9 +69,9 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getEventRequests(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
         eventService.getUserEventById(eventId, userId);
-        return requestRepository.findAllByEventId(eventId);
+        return requestMapper.toParticipationRequestDtoList(requestRepository.findAllByEventId(eventId));
     }
 
     @Override
