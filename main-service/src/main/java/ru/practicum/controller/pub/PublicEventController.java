@@ -50,9 +50,8 @@ public class PublicEventController {
                         "onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         statsClient.createHit(request);
-        return eventMapper.toEventShortDtoList(
-                eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
-                        rangeEnd, onlyAvailable, sort, from, size));
+        return eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
+                        rangeEnd, onlyAvailable, sort, from, size);
     }
 
     /**

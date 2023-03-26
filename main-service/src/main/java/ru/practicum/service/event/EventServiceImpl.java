@@ -84,15 +84,19 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size) {
+    public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
+                                                Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                SortEvent sort, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
         if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
-            return eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd,
+                    onlyAvailable, PageRequest.of(from, size)));
         } else {
-            return eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd,
+                    onlyAvailable, PageRequest.of(from, size)));
         }
     }
 /*
