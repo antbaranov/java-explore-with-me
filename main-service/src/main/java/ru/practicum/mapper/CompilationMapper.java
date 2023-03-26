@@ -24,6 +24,8 @@ public interface CompilationMapper {
 
     CompilationDto toCompilationDto(Compilation compilation);
 
+    Compilation toCompilationUpd(CompilationDto compilationDto);
+
     static Compilation update(Compilation recipient, Compilation donor) {
         if (donor.getEvents() != null) recipient.setEvents(donor.getEvents());
         if (donor.getPinned() != null) recipient.setPinned(donor.getPinned());

@@ -3,13 +3,8 @@ package ru.practicum.controller.pub;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.compliiation.CompilationDto;
-import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.service.compilation.CompilationService;
 
 import javax.validation.constraints.Min;
@@ -25,7 +20,6 @@ import java.util.List;
 public class PublicCompilationController {
 
     private final CompilationService compilationService;
-    private final CompilationMapper compilationMapper;
 
     /**
      * Получение подборок событий
@@ -45,7 +39,6 @@ public class PublicCompilationController {
     @GetMapping("{compId}")
     public CompilationDto getById(@PathVariable @Min(0) Long compId) {
         log.info("GET compilation compId={}", compId);
-        return compilationMapper.toCompilationDto(
-                compilationService.getById(compId));
+        return compilationService.getById(compId);
     }
 }

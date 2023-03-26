@@ -47,7 +47,7 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationDto update(Long compId, NewCompilationDto dto) {
         Compilation compilation = CompilationMapper.toCompilation(dto);
-        Compilation recipient = getById(compId);
+        Compilation recipient = compilationMapper.toCompilationUpd(getById(compId));
         return compilationMapper.toCompilationDto(
                 compilationRepository.save(CompilationMapper.update(recipient, compilation)));
     }
@@ -59,8 +59,8 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public Compilation getById(Long compId) {
-        return compilationRepository.findById(compId).orElseThrow(
-                () -> new NotFoundException("List with id=" + compId));
+    public CompilationDto getById(Long compId) {
+        return compilationMapper.toCompilationDto(compilationRepository.findById(compId).orElseThrow(
+                () -> new NotFoundException("List with id=" + compId)));
     }
 }
