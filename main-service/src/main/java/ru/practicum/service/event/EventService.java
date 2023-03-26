@@ -2,7 +2,6 @@ package ru.practicum.service.event;
 
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.SortEvent;
 import ru.practicum.entity.State;
