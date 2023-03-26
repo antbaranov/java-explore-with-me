@@ -50,9 +50,8 @@ public class PublicEventController {
                         "onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
         statsClient.createHit(request);
-        return eventMapper.toEventShortDtoList(
-                eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
-                        rangeEnd, onlyAvailable, sort, from, size));
+        return eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
+                        rangeEnd, onlyAvailable, sort, from, size);
     }
 
     /**
@@ -62,7 +61,6 @@ public class PublicEventController {
     public EventFullDto getById(@PathVariable @Min(0) Long id, HttpServletRequest request) {
         log.info("GET event by id={}", id);
         statsClient.createHit(request);
-        return eventMapper.toEventFullDto(
-                eventService.getById(id));
+        return eventService.getById(id);
     }
 }
