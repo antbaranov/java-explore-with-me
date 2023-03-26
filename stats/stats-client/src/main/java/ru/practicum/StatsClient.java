@@ -11,8 +11,6 @@ import ru.practicum.dto.EndpointHitRequestDto;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
