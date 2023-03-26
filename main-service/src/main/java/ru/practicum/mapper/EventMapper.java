@@ -1,7 +1,6 @@
 package ru.practicum.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.event.EventFullDto;
@@ -14,7 +13,6 @@ import ru.practicum.entity.Event;
 import ru.practicum.entity.Location;
 import ru.practicum.entity.State;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -108,7 +106,6 @@ public class EventMapper {
                 .views(event.getViews().intValue())
                 .build();
     }
-
 
     public static Event updateEvent(Event donor, Event recipient) {
         if (donor.getAnnotation() != null) recipient.setAnnotation(donor.getAnnotation());

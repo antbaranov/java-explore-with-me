@@ -24,22 +24,27 @@ public interface EventService {
 
     List<Event> getAll(List<Long> eventIds);
 
+
+   /* List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+                                   Timestamp rangeStart, Timestamp rangeEnd, int from, int size);*/
+
     List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                           Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
 
-    List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
-                                                 Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
-                                                 SortEvent sort, int from, int size);
+    List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size);
+
+   /* List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
+                                                 Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort,
+                                                 int from, int size);*/
 
     EventFullDto getUserEventById(Long eventId, Long userId);
 
     Event getUserEventByIdUpdate(Long eventId, Long userId);
 
 
-    EventFullDto getById(Long eventId);
+    Event getById(Long eventId);
 
-    Event getByIdUpd(Long eventId);
-
+    //    Event updateByAdmin(Long eventId, Event event);
     EventFullDto updateByAdmin(Long eventId, Event event);
 
     Optional<Event> getByIdForRequest(Long eventId);

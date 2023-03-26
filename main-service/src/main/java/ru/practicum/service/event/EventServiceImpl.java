@@ -76,32 +76,57 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
-                                                 Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
+    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories, Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart,
-                rangeEnd, PageRequest.of(from, size)));
+        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
     @Override
-    public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
-                                                Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort,
-                                                int from, int size) {
+    public List<Event> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
         if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd,
-                    onlyAvailable, PageRequest.of(from, size)));
+            return eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
         } else {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd,
-                    onlyAvailable, PageRequest.of(from, size)));
+            return eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, PageRequest.of(from, size));
         }
     }
+/*
 
+    @Override
+    public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
+                                                        Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                        SortEvent sort, int from, int size) {
+        List<Event> events = EventMapper.toEventShortDtoList();
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+        if (text != null) text = text.toLowerCase();
+
+        if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        } else {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        }
+    }
+*/
 
     @Override
     public EventFullDto getUserEventById(Long eventId, Long userId) {
@@ -111,9 +136,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getById(Long eventId) {
-        return eventMapper.toEventFullDto(eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId)));
+    public Event getById(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
     public Event getUserEventByIdUpdate(Long eventId, Long userId) {
@@ -135,18 +160,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event getByIdUpd(Long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
-    }
-
-    @Override
     public EventFullDto updateByAdmin(Long eventId, Event donor) {
-        Event recipient = getByIdUpd(eventId);
+        Event recipient = getById(eventId);
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
 
-        return EventMapper.toEventFullDto(save(recipient));
+        return eventMapper.toEventFullDto(save(recipient));
     }
 
     // По тестам если ивент не найден для запроса возвращаться 409, а не 404
