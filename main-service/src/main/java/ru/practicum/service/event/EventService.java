@@ -2,6 +2,7 @@ package ru.practicum.service.event;
 
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.SortEvent;
 import ru.practicum.entity.State;
@@ -16,7 +17,7 @@ public interface EventService {
 
     Event save(Event event);
 
-    Event update(Long userId, Long eventId, Event donor);
+    EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto);
 
 //    EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest donor);
 

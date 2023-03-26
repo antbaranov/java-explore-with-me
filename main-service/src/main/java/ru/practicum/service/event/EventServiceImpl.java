@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
@@ -49,7 +50,6 @@ public class EventServiceImpl implements EventService {
 
         return EventMapper.toEventFullDto(save(event));
     }
-
 
     // Запись ивента
     @Override
@@ -126,12 +126,14 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getUserEventById(Long eventId, Long userId) {
         userService.getById(userId);
-        return eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+        return eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
     @Override
     public Event getById(Long eventId) {
-        return eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 /*
 
@@ -148,15 +150,15 @@ public class EventServiceImpl implements EventService {
 */
 
     @Override
-    public Event update(Long userId, Long eventId, Event donor) {
-//        Event donor = EventMapper.toEvent(updateUserDto);
+    public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto) {
+        Event donor = EventMapper.toEvent(dto);
         Event recipient = getUserEventById(eventId, userId);
         if (recipient.getState() == State.PUBLISHED) {
             throw new AccessException("Error: event state");
         }
         recipient = updateEvent(donor, recipient);
 
-        return save(recipient);
+        return EventMapper.toEventFullDto(save(recipient));
     }
 
     @Override

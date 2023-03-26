@@ -36,17 +36,17 @@ public class EventMapper {
                 .build();
     }
 
-    public Event toEvent(UpdateEventUserRequest updateUserDto) {
+    public static Event toEvent(UpdateEventUserRequest updateUserDto) {
         Event event = new Event();
         if (updateUserDto.getAnnotation() != null) event.setLocation(
-                locationMapper.toLocation(updateUserDto.getLocation()));
+                LocationMapper.toLocation(updateUserDto.getLocation()));
         if (updateUserDto.getCategory() != null) event.setCategory(
                 Category.builder().id(updateUserDto.getCategory()).build());
         if (updateUserDto.getDescription() != null) event.setDescription(
                 updateUserDto.getDescription());
         if (updateUserDto.getEventDate() != null) event.setEventDate(
                 updateUserDto.getEventDate());
-        if (updateUserDto.getLocation() != null) event.setLocation(locationMapper.toLocation(
+        if (updateUserDto.getLocation() != null) event.setLocation(LocationMapper.toLocation(
                 updateUserDto.getLocation()));
         if (updateUserDto.getPaid() != null) event.setPaid(
                 updateUserDto.getPaid());
@@ -72,7 +72,7 @@ public class EventMapper {
         if (updateAdminDto.getEventDate() != null) event.setEventDate(
                 updateAdminDto.getEventDate());
         if (updateAdminDto.getLocation() != null) event.setLocation(
-                locationMapper.toLocation(updateAdminDto.getLocation()));
+                LocationMapper.toLocation(updateAdminDto.getLocation()));
         if (updateAdminDto.getPaid() != null) event.setPaid(
                 updateAdminDto.getPaid());
         if (updateAdminDto.getParticipantLimit() != null) event.setParticipantLimit(

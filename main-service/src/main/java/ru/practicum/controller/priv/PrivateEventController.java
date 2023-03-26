@@ -47,9 +47,7 @@ public class PrivateEventController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto create(
-            @PathVariable @Min(0) Long userId,
-            @RequestBody @Valid NewEventDto dto) {
+    public EventFullDto create(@PathVariable @Min(0) Long userId, @RequestBody @Valid NewEventDto dto) {
         log.info("Create {}", dto.toString());
         return eventService.create(userId, dto);
     }
@@ -63,8 +61,7 @@ public class PrivateEventController {
             @PathVariable @Min(0) Long eventId,
             @Valid @RequestBody UpdateEventUserRequest dto) {
         log.info("Update by userId ={} and eventId={}, for {}", userId, eventId, dto.toString());
-        return eventMapper.toEventFullDto(
-                eventService.update(userId, eventId, eventMapper.toEvent(dto)));
+        return eventService.update(userId, eventId, dto);
     }
 
     /**
