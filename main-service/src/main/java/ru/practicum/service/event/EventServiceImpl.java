@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.*;
@@ -58,10 +59,17 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
-    @Override
+  /*  @Override
     public List<Event> getAll(Long userId, int from, int size) {
         userService.getById(userId);
         return eventRepository.findAllByInitiatorId(userId, PageRequest.of(from, size));
+    }*/
+
+    @Override
+    public List<EventShortDto> getAll(Long userId, int from, int size) {
+        userService.getById(userId);
+        return EventMapper.toEventShortDtoList(
+                eventRepository.findAllByInitiatorId(userId, PageRequest.of(from, size)));
     }
 
     @Override

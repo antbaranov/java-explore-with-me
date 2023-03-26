@@ -86,8 +86,7 @@ public class PrivateEventController {
             @RequestParam(defaultValue = "0") @Min(0) int from,
             @RequestParam(defaultValue = "10") @Min(1) int size) {
         log.info("GET Events by userId={}, from={}, size={}", userId, from, size);
-        return eventMapper.toEventShortDtoList(
-                eventService.getAll(userId, from, size));
+        return eventService.getAll(userId, from, size);
     }
 
     /**

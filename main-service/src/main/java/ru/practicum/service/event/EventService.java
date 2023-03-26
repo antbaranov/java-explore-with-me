@@ -1,6 +1,7 @@
 package ru.practicum.service.event;
 
 import ru.practicum.dto.event.EventFullDto;
+import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.Event;
@@ -19,9 +20,12 @@ public interface EventService {
 
     EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto);
 
-    List<Event> getAll(Long userId, int from, int size);
+    List<EventShortDto> getAll(Long userId, int from, int size);
+
+//    List<Event> getAll(List<Long> eventIds);
 
     List<Event> getAll(List<Long> eventIds);
+
 
    /* List<Event> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
                                    Timestamp rangeStart, Timestamp rangeEnd, int from, int size);*/
