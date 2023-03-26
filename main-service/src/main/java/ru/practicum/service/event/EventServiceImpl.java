@@ -11,6 +11,7 @@ import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.*;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
@@ -34,12 +35,14 @@ public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
 
+    private final CategoryMapper categoryMapper;
+
     @Override
     public EventFullDto create(Long userId, NewEventDto dto) {
         Event event = EventMapper.toEvent(dto);
         User user = userService.getById(userId);
         Location location = getLocation(event.getLocation());
-        Category category = categoryService.findById(event.getCategory().getId());
+        Category category =  categoryService.findByIdCreate(event.getCategory().getId());
         event.setInitiator(user);
         event.setConfirmedRequests(0);
         event.setLocation(location);

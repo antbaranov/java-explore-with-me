@@ -42,13 +42,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findCategories(int from, int size) {
-        return categoryRepository.findAll(PageRequest.of(from, size))
-                .toList();
+    public List<CategoryResponseDto> findCategories(int from, int size) {
+        return categoryMapper.toCategoryResponseDtoList(categoryRepository.findAll(PageRequest.of(from, size)).toList());
     }
 
     @Override
-    public Category findById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Category with id=" + id));
+    public CategoryResponseDto findById(Long id) {
+        return CategoryMapper.toCategoryResponseDto(categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category with id=" + id)));
+    }
+
+    @Override
+    public Category findByIdCreate(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category with id=" + id));
     }
 }
