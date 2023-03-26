@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponseDto create(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
+        return categoryMapper.toCategoryResponseDto(categoryRepository.save(category));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto update(Long catId, NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.toCategory(newCategoryDto);
         category.setId(catId);
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
+        return categoryMapper.toCategoryResponseDto(categoryRepository.save(category));
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto findById(Long id) {
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.findById(id)
+        return categoryMapper.toCategoryResponseDto(categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + id)));
     }
 

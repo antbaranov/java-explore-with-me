@@ -34,7 +34,6 @@ public interface EventService {
 
     Event getUserEventByIdUpdate(Long eventId, Long userId);
 
-
     Event getById(Long eventId);
 
     EventFullDto updateByAdmin(Long eventId, Event event);
