@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.EndpointHitRequestDto;
 import ru.practicum.dto.EndpointHitResponseDto;
 import ru.practicum.dto.ViewStatsResponseDto;
-import ru.practicum.mapper.StatsMapper;
 import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
@@ -27,7 +26,6 @@ import java.util.List;
 public class StatsController {
 
     private final StatsService statsService;
-    private final StatsMapper statsMapper;
 
     /**
      * Создаёт EndpointHit сохраняя информацию о запросе
@@ -36,7 +34,7 @@ public class StatsController {
     @ResponseStatus(HttpStatus.CREATED)
     public EndpointHitResponseDto create(@RequestBody @Valid EndpointHitRequestDto endpointHitRequestDto) {
         log.info("POST EndpointHit {}", endpointHitRequestDto);
-        return statsMapper.toEndpointHitResponseDto(statsService.createHit(statsMapper.toEndpointHit(endpointHitRequestDto)));
+        return statsService.createHit(endpointHitRequestDto);
     }
 
     /**
@@ -49,6 +47,6 @@ public class StatsController {
             @RequestParam List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
         log.info("GET stats start={}, end={}, uris={}, unique={}", start, end, uris, unique);
-        return statsMapper.toListViewStatsResponseDto(statsService.getStats(start, end, uris, unique));
+        return statsService.getStats(start, end, uris, unique);
     }
 }
