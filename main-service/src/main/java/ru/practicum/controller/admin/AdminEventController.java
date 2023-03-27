@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.entity.State;
-import ru.practicum.mapper.EventMapper;
 import ru.practicum.service.event.EventService;
 
 import javax.validation.Valid;
@@ -30,7 +29,6 @@ import java.util.List;
 public class AdminEventController {
 
     private final EventService eventService;
-    private final EventMapper eventMapper;
 
     /**
      * Редактирование данных события и его статуса (отклонение/публикация)
