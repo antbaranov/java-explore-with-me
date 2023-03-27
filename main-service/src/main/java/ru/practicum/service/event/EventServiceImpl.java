@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
@@ -25,6 +26,7 @@ import ru.practicum.service.user.UserService;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +41,9 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
 
     private final EventMapper eventMapper;
+
+    private final StatsClient statsClient;
+
 
     @Override
     public EventFullDto create(Long userId, NewEventDto dto) {
@@ -110,7 +115,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getUserEventById(Long eventId, Long userId) {
         userService.getById(userId);
-        return EventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId)
+        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId)));
     }
 
@@ -120,6 +125,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId));
     }
 
+    @Override
     public Event getUserEventByIdUpdate(Long eventId, Long userId) {
         userService.getById(userId);
         return eventRepository.findByIdAndInitiatorId(eventId, userId)
@@ -135,7 +141,7 @@ public class EventServiceImpl implements EventService {
         }
         recipient = updateEvent(donor, recipient);
 
-        return EventMapper.toEventFullDto(save(recipient));
+        return eventMapper.toEventFullDto(save(recipient));
     }
 
     @Override
@@ -145,13 +151,12 @@ public class EventServiceImpl implements EventService {
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
 
-        return EventMapper.toEventFullDto(save(recipient));
+        return eventMapper.toEventFullDto(save(recipient));
     }
 
     // По тестам если ивент не найден для запроса возвращаться 409, а не 404
     @Override
     public Optional<Event> getByIdForRequest(Long eventId) {
-
         return eventRepository.findById(eventId);
     }
 
@@ -167,4 +172,5 @@ public class EventServiceImpl implements EventService {
         return locationRepository.findByLatAndLon(location.getLat(), location.getLon())
                 .orElse(locationRepository.save(location));
     }
+
 }
