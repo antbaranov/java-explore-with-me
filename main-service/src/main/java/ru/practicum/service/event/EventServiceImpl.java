@@ -76,13 +76,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
-                                                 Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
+    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories, Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart,
-                rangeEnd, PageRequest.of(from, size)));
+        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
     @Override
@@ -94,15 +92,45 @@ public class EventServiceImpl implements EventService {
         if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(
-                    text, categories, paid, rangeStart, rangeEnd,
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd,
                     onlyAvailable, PageRequest.of(from, size)));
         } else {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(
-                    text, categories, paid, rangeStart, rangeEnd,
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd,
                     onlyAvailable, PageRequest.of(from, size)));
         }
     }
+/*
+
+    @Override
+    public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
+                                                        Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                        SortEvent sort, int from, int size) {
+        List<Event> events = EventMapper.toEventShortDtoList();
+        if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
+        if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
+        if (text != null) text = text.toLowerCase();
+
+        if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        } else {
+            return EventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(
+                    text,
+                    categories,
+                    paid,
+                    rangeStart,
+                    rangeEnd,
+                    onlyAvailable,
+                    PageRequest.of(from, size)));
+        }
+    }
+*/
 
     @Override
     public EventFullDto getUserEventById(Long eventId, Long userId) {
@@ -160,7 +188,6 @@ public class EventServiceImpl implements EventService {
     }
 
     private Location getLocation(Location location) {
-        return locationRepository.findByLatAndLon(location.getLat(), location.getLon())
-                .orElse(locationRepository.save(location));
+        return locationRepository.findByLatAndLon(location.getLat(), location.getLon()).orElse(locationRepository.save(location));
     }
 }

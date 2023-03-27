@@ -29,13 +29,12 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public List<CompilationDto> getAll(boolean pinned, int from, int size) {
-        return compilationMapper.toCompilationDtoList(
-                compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size)));
+        return compilationMapper.toCompilationDtoList(compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size)));
     }
 
     @Override
     public CompilationDto create(NewCompilationDto dto) {
-        Compilation compilation = compilationMapper.toCompilation(dto);
+        Compilation compilation = CompilationMapper.toCompilation(dto);
         compilation.setEvents(new HashSet<>(eventService.getAll(
                 compilation.getEvents().stream()
                         .map(Event::getId)
@@ -47,10 +46,10 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto update(Long compId, NewCompilationDto dto) {
-        Compilation compilation = compilationMapper.toCompilation(dto);
+        Compilation compilation = CompilationMapper.toCompilation(dto);
         Compilation recipient = compilationMapper.toCompilationUpd(getById(compId));
         return compilationMapper.toCompilationDto(
-                compilationRepository.save(compilationMapper.update(recipient, compilation)));
+                compilationRepository.save(CompilationMapper.update(recipient, compilation)));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto getById(Long compId) {
-        return compilationMapper.toCompilationDto(compilationRepository.findById(compId)
-                .orElseThrow(() -> new NotFoundException("List with id=" + compId)));
+        return compilationMapper.toCompilationDto(compilationRepository.findById(compId).orElseThrow(
+                () -> new NotFoundException("List with id=" + compId)));
     }
 }
