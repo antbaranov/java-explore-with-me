@@ -26,7 +26,6 @@ import ru.practicum.service.user.UserService;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
