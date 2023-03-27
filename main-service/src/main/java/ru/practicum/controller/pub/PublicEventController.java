@@ -61,6 +61,6 @@ public class PublicEventController {
     public EventFullDto getById(@PathVariable @Min(0) Long id, HttpServletRequest request) {
         log.info("GET event by id={}", id);
         statsClient.createHit(request);
-        return eventMapper.toEventFullDto(eventService.getById(id);
+        return eventMapper.toEventFullDto(eventService.getById(id));
     }
 }
