@@ -7,7 +7,6 @@ import ru.practicum.entity.Location;
 
 @Mapper(componentModel = "spring")
 public interface LocationMapper {
-//    static Location toLocation(LocationRequestDto dto);
 
     static Location toLocation(LocationRequestDto dto) {
         if (dto == null) return null;

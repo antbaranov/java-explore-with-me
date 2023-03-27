@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EventMapper {
 
-    private final LocationMapper locationMapper;
-
     public static Event toEvent(NewEventDto dto) {
         return Event.builder()
                 .annotation(dto.getAnnotation())

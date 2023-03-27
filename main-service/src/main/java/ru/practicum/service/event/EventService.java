@@ -3,6 +3,7 @@ package ru.practicum.service.event;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.event.UpdateEventUserRequest;
 import ru.practicum.entity.Event;
 import ru.practicum.entity.SortEvent;
@@ -37,7 +38,7 @@ public interface EventService {
 
     Event getById(Long eventId);
 
-    EventFullDto updateByAdmin(Long eventId, Event event);
+    EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequest updateAdminDto);
 
     Optional<Event> getByIdForRequest(Long eventId);
 }

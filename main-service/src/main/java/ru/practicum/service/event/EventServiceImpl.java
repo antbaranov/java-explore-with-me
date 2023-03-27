@@ -7,11 +7,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
+import ru.practicum.dto.event.UpdateEventAdminRequest;
 import ru.practicum.dto.event.UpdateEventUserRequest;
-import ru.practicum.entity.*;
+import ru.practicum.entity.Category;
+import ru.practicum.entity.Event;
+import ru.practicum.entity.Location;
+import ru.practicum.entity.SortEvent;
+import ru.practicum.entity.State;
+import ru.practicum.entity.User;
 import ru.practicum.exception.AccessException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
@@ -35,14 +40,12 @@ public class EventServiceImpl implements EventService {
 
     private final EventMapper eventMapper;
 
-    private final CategoryMapper categoryMapper;
-
     @Override
     public EventFullDto create(Long userId, NewEventDto dto) {
         Event event = EventMapper.toEvent(dto);
         User user = userService.getById(userId);
         Location location = getLocation(event.getLocation());
-        Category category =  categoryService.findByIdCreate(event.getCategory().getId());
+        Category category = categoryService.findByIdCreate(event.getCategory().getId());
         event.setInitiator(user);
         event.setConfirmedRequests(0);
         event.setLocation(location);
@@ -76,26 +79,30 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories, Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
+    public List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
+                                                 Timestamp rangeStart, Timestamp rangeEnd, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now().minusYears(100));
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
 
-        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size)));
+        return eventMapper.toEventFullDtoList(eventRepository.findByParameters(
+                users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size)));
     }
 
     @Override
     public List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid,
-                                                Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
-                                                SortEvent sort, int from, int size) {
+                                                        Timestamp rangeStart, Timestamp rangeEnd, Boolean onlyAvailable,
+                                                        SortEvent sort, int from, int size) {
         if (rangeStart == null) rangeStart = Timestamp.valueOf(LocalDateTime.now());
         if (rangeEnd == null) rangeEnd = Timestamp.valueOf(LocalDateTime.now().plusYears(100));
         if (text != null) text = text.toLowerCase();
 
         if (sort == null || sort.equals(SortEvent.EVENT_DATE)) {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(text, categories, paid, rangeStart, rangeEnd,
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortEventDate(
+                    text, categories, paid, rangeStart, rangeEnd,
                     onlyAvailable, PageRequest.of(from, size)));
         } else {
-            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(text, categories, paid, rangeStart, rangeEnd,
+            return eventMapper.toEventShortDtoList(eventRepository.findByParametersForPublicSortViews(
+                    text, categories, paid, rangeStart, rangeEnd,
                     onlyAvailable, PageRequest.of(from, size)));
         }
     }
@@ -132,12 +139,13 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateByAdmin(Long eventId, Event donor) {
+    public EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequest updateAdminDto) {
+        Event donor = eventMapper.toEvent(updateAdminDto);
         Event recipient = getById(eventId);
         if (!recipient.getState().equals(State.PENDING)) throw new AccessException("Event not pending");
         recipient = updateEvent(donor, recipient);
 
-        return eventMapper.toEventFullDto(save(recipient));
+        return EventMapper.toEventFullDto(save(recipient));
     }
 
     // По тестам если ивент не найден для запроса возвращаться 409, а не 404
@@ -156,8 +164,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private Location getLocation(Location location) {
-        return locationRepository.findByLatAndLon(location.getLat(), location.getLon()).orElse(locationRepository.save(location));
+        return locationRepository.findByLatAndLon(location.getLat(), location.getLon())
+                .orElse(locationRepository.save(location));
     }
-
-
 }
