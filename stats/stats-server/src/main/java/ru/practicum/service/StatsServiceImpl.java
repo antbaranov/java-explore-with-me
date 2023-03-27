@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitRequestDto;
 import ru.practicum.dto.EndpointHitResponseDto;
-import ru.practicum.dto.ViewStatsResponseDto;
+import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.repository.StatsRepository;
@@ -27,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStatsResponseDto> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique) {
+    public List<ViewStatsDto> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique) {
         if (Boolean.TRUE.equals(unique)) {
             statsRepository.findStatsByDatesUniqueIp(start, end, uris);
         }

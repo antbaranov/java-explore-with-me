@@ -3,7 +3,7 @@ package ru.practicum.mapper;
 import org.mapstruct.Mapper;
 import ru.practicum.dto.EndpointHitRequestDto;
 import ru.practicum.dto.EndpointHitResponseDto;
-import ru.practicum.dto.ViewStatsResponseDto;
+import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.entity.ViewStats;
 
@@ -15,7 +15,7 @@ public interface StatsMapper {
 
     EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit entity);
 
-    List<ViewStatsResponseDto> toListViewStatsResponseDto(List<ViewStats> viewStatsList);
+    List<ViewStatsDto> toListViewStatsResponseDto(List<ViewStats> viewStatsList);
 
-    ViewStatsResponseDto toViewStatsResponseDto(ViewStats viewStats);
+    ViewStatsDto toViewStatsResponseDto(ViewStats viewStats);
 }

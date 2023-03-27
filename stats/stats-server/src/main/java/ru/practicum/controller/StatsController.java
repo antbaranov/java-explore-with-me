@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.EndpointHitRequestDto;
 import ru.practicum.dto.EndpointHitResponseDto;
-import ru.practicum.dto.ViewStatsResponseDto;
+import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
 
 import javax.validation.Valid;
@@ -41,7 +41,7 @@ public class StatsController {
      * Возвращает статистику по посещениям в интервале дат, по списку uri
      */
     @GetMapping("/stats")
-    public List<ViewStatsResponseDto> getStats(
+    public List<ViewStatsDto> getStats(
             @RequestParam Timestamp start,
             @RequestParam Timestamp end,
             @RequestParam List<String> uris,
