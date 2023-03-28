@@ -2,8 +2,8 @@ package ru.practicum.service.stats;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.StatsClient;
-import ru.practicum.dto.EndpointHitResponseDto;
+import ru.practicum.StatClient2;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
     private static final String APP_NAME = "ewm-main-service";
-    private final StatsClient statsClient;
+    private final StatClient2 statsClient;
 
     @Override
     public void makeView(HttpServletRequest request) {
-        statsClient.postEndpointHit(EndpointHitResponseDto.fromHttpServletRequest(request, APP_NAME));
+        statsClient.postEndpointHit(EndpointHitDto.fromHttpServletRequest(request, APP_NAME));
     }
 
     @Override

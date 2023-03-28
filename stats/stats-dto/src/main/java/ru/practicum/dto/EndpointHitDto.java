@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EndpointHitResponseDto {
+public class EndpointHitDto {
     private Long id;
     private String app;
     private String uri;
@@ -24,8 +24,8 @@ public class EndpointHitResponseDto {
     private Timestamp timestamp;
 
     @JsonIgnore
-    public static EndpointHitResponseDto fromHttpServletRequest(HttpServletRequest request, String appName) {
-        return EndpointHitResponseDto.builder()
+    public static EndpointHitDto fromHttpServletRequest(HttpServletRequest request, String appName) {
+        return EndpointHitDto.builder()
                 .app(appName)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())

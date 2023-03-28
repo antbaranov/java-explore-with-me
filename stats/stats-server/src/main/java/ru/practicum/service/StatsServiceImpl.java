@@ -2,8 +2,7 @@ package ru.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.dto.EndpointHitRequestDto;
-import ru.practicum.dto.EndpointHitResponseDto;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.mapper.StatsMapper;
@@ -20,10 +19,10 @@ public class StatsServiceImpl implements StatsService {
     private final StatsMapper statsMapper;
 
     @Override
-    public EndpointHitResponseDto createHit(EndpointHitRequestDto endpointHitRequestDto) {
-        EndpointHit endpointHit = statsMapper.toEndpointHit(endpointHitRequestDto);
+    public EndpointHitDto createHit(EndpointHitDto endpointHitDto) {
+        EndpointHit endpointHit = statsMapper.toEndpointHit(endpointHitDto);
 
-        return statsMapper.toEndpointHitResponseDto(statsRepository.save(endpointHit));
+        return statsMapper.toEndpointHitDto(statsRepository.save(endpointHit));
     }
 
     @Override
@@ -31,6 +30,6 @@ public class StatsServiceImpl implements StatsService {
         if (Boolean.TRUE.equals(unique)) {
             statsRepository.findStatsByDatesUniqueIp(start, end, uris);
         }
-        return statsMapper.toListViewStatsResponseDto(statsRepository.findStatsByDates(start, end, uris));
+        return statsMapper.toViewStatsDtoList(statsRepository.findStatsByDates(start, end, uris));
     }
 }

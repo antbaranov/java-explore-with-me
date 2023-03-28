@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.StatsClient;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.entity.SortEvent;
@@ -28,7 +27,6 @@ import java.util.List;
 public class PublicEventController {
 
     private final EventService eventService;
-    private final StatsClient statsClient;
     private final EventMapper eventMapper;
 
 
@@ -49,7 +47,7 @@ public class PublicEventController {
         log.info("GET events by text={}, categories={}, paid={}, rangeStart={}, rangeEnd={}, " +
                         "onlyAvailable={}, sort={}, from={}, size={}",
                 text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
-        statsClient.createHit(request);
+//        statsClient.createHit(request);
         return eventService.getAllByParametersPublic(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, from, size);
     }
@@ -60,7 +58,7 @@ public class PublicEventController {
     @GetMapping("{id}")
     public EventFullDto getById(@PathVariable @Min(0) Long id, HttpServletRequest request) {
         log.info("GET event by id={}", id);
-        statsClient.createHit(request);
+//        statsClient.createHit(request);
         return eventMapper.toEventFullDto(eventService.getById(id));
     }
 }

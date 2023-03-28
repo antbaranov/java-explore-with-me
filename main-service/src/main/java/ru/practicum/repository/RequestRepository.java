@@ -6,6 +6,7 @@ import ru.practicum.entity.Request;
 import ru.practicum.entity.Status;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface RequestRepository extends JpaRepository<Request, Long> {
@@ -19,4 +20,7 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
             "WHERE r.event.id = :eventId " +
             "AND r.status = :status")
     Optional<Integer> findCountRequestByEventIdAndStatus(Long eventId, Status status);
+
+    @Query("select r.event.id, count(r) from Request r where r.event.id in ?1 and r.status = ?2 group by r.event.id")
+    Map<Long, Integer> findAllConfirmedRequestsByEventIds(List<Long> ids, Status status);
 }

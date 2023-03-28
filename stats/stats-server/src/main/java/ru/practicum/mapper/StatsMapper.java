@@ -1,8 +1,7 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
-import ru.practicum.dto.EndpointHitRequestDto;
-import ru.practicum.dto.EndpointHitResponseDto;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.entity.EndpointHit;
 import ru.practicum.entity.ViewStats;
@@ -11,11 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface StatsMapper {
-    EndpointHit toEndpointHit(EndpointHitRequestDto dto);
+    EndpointHit toEndpointHit(EndpointHitDto endpointHitDto);
 
-    EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit entity);
+    EndpointHitDto toEndpointHitDto(EndpointHit endpointHit);
 
-    List<ViewStatsDto> toListViewStatsResponseDto(List<ViewStats> viewStatsList);
+    List<ViewStatsDto> toViewStatsDtoList(List<ViewStats> viewStatsList);
 
-    ViewStatsDto toViewStatsResponseDto(ViewStats viewStats);
+    ViewStatsDto toViewStatsDto(ViewStats viewStats);
 }

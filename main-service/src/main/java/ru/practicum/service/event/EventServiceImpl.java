@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.StatsClient;
+
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
@@ -21,6 +21,7 @@ import ru.practicum.exception.NotFoundException;
 import ru.practicum.mapper.EventMapper;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.LocationRepository;
+import ru.practicum.repository.RequestRepository;
 import ru.practicum.service.category.CategoryService;
 import ru.practicum.service.user.UserService;
 
@@ -36,12 +37,14 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
+    private final String uri = "/events";
+
     private final UserService userService;
     private final CategoryService categoryService;
 
     private final EventMapper eventMapper;
 
-    private final StatsClient statsClient;
+    private final RequestRepository requestRepository;
 
 
     @Override
@@ -171,5 +174,9 @@ public class EventServiceImpl implements EventService {
         return locationRepository.findByLatAndLon(location.getLat(), location.getLon())
                 .orElse(locationRepository.save(location));
     }
+
+
+
+
 
 }

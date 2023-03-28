@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.dto.EndpointHitRequestDto;
-import ru.practicum.dto.EndpointHitResponseDto;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.service.StatsService;
 
@@ -32,9 +31,9 @@ public class StatsController {
      */
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHitResponseDto create(@RequestBody @Valid EndpointHitRequestDto endpointHitRequestDto) {
-        log.info("POST EndpointHit {}", endpointHitRequestDto);
-        return statsService.createHit(endpointHitRequestDto);
+    public EndpointHitDto create(@RequestBody @Valid EndpointHitDto endpointHitDto) {
+        log.info("POST EndpointHit {}", endpointHitDto);
+        return statsService.createHit(endpointHitDto);
     }
 
     /**

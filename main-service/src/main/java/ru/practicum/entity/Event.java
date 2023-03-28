@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.sql.Timestamp;
 
 @Entity
@@ -63,5 +64,21 @@ public class Event {
     @Column(nullable = false)
     private String title;
     @Column(nullable = false)
-    private Integer views;
+    private Long views;
+
+    public long getConfirmedRequest() {
+        return confirmedRequests;
+    }
+
+    public Long getViews() {
+        return views;
+    }
+
+    public void setConfirmedRequest(int confirmedRequest) {
+        this.confirmedRequests = confirmedRequest;
+    }
+
+    public void setViews(long views) {
+        this.views = views;
+    }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+//@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EventMapper {
 
     public static Event toEvent(NewEventDto dto) {
@@ -129,7 +129,7 @@ public class EventMapper {
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
                 .title(event.getTitle())
-                .views(event.getViews())
+                .views(Math.toIntExact(event.getViews()))
                 .build();
     }
 
