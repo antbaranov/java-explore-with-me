@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import ru.practicum.entity.Status;
+import ru.practicum.enums.RequestStatus;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -20,7 +20,7 @@ public class ParticipationRequestDto {
     private Long event;
     @NotNull
     private Long requester;
-    private Status status;
+    private RequestStatus status;
     @JsonFormat(pattern = DATE_TIME)
     private LocalDateTime created;
 }

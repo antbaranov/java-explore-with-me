@@ -1,54 +1,44 @@
 package ru.practicum.controller.admin;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.category.CategoryResponseDto;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.service.category.CategoryService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 
-@Validated
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/admin/categories")
 @RequiredArgsConstructor
-@Slf4j
+@Validated
 public class AdminCategoryController {
-
     private final CategoryService categoryService;
 
-    /**
-     * Добавление новой категории
-     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryResponseDto create(@Valid @RequestBody NewCategoryDto newCategoryDto) {
-        log.info("Create {}", newCategoryDto.toString());
-        return categoryService.create(newCategoryDto);
+    public CategoryDto createCategory(@Valid @RequestBody NewCategoryDto newCategoryDto) {
+        return categoryService.createCategory(newCategoryDto);
     }
 
-    /**
-     * Удаление категории
-     */
-    @DeleteMapping("{catId}")
+    @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteById(@PathVariable @Min(0) Long catId) {
-        log.info("Delete by id={}", catId);
-        categoryService.deleteById(catId);
+    public void deleteCategory(@PathVariable Long catId) {
+        categoryService.deleteCategory(catId);
     }
 
-    /**
-     * Обновление категории
-     */
-    @PatchMapping("{catId}")
-    @ResponseStatus(HttpStatus.OK)
-    public CategoryResponseDto update(@Valid @RequestBody NewCategoryDto newCategoryDto,
-                                      @PathVariable @Min(0) Long catId) {
-        log.info("Update by id={}, for {}", catId, newCategoryDto.toString());
-        return categoryService.update(catId, newCategoryDto);
+    @PatchMapping("/{catId}")
+    public CategoryDto updateCategory(@PathVariable Long catId, @Valid @RequestBody CategoryDto categoryDto) {
+        return categoryService.updateCategory(catId, categoryDto);
     }
 }

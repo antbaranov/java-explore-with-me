@@ -2,44 +2,38 @@ package ru.practicum.dto.event;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.dto.location.LocationRequestDto;
+import ru.practicum.entity.Location;
+import ru.practicum.util.Pattern;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-import static ru.practicum.util.Constants.DATE_TIME;
-
-@Getter
-@Setter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class NewEventDto {
-
-    @Size(max = 2000, min = 20)
-    @NotBlank
+    @NotNull
+    @Size(min = 3, max = 500)
     private String annotation;
     @NotNull
     private Long category;
-    @Size(max = 7000, min = 20)
-    @NotBlank
+    @NotNull
+    @Size(min = 20, max = 2000)
     private String description;
     @NotNull
-    @JsonFormat(pattern = DATE_TIME)
-    private Timestamp eventDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+    private LocalDateTime eventDate;
     @NotNull
-    private LocationRequestDto location;
-    @Builder.Default
-    private boolean paid = false;
+    private Location location;
+    private boolean paid;
     private int participantLimit;
-    private boolean requestModeration;
-    @Size(max = 120, min = 3)
-    @NotBlank
+    private Boolean requestModeration;
+    @NotNull
+    @Size(min = 3, max = 120)
     private String title;
 }

@@ -9,6 +9,7 @@ import ru.practicum.mapper.StatsMapper;
 import ru.practicum.repository.StatsRepository;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStatsDto> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique) {
+    public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         if (Boolean.TRUE.equals(unique)) {
             statsRepository.findStatsByDatesUniqueIp(start, end, uris);
         }

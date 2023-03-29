@@ -1,6 +1,7 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.dto.user.UserIncomeDto;
 import ru.practicum.dto.user.UserResponseDto;
@@ -10,18 +11,11 @@ import ru.practicum.entity.User;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
+@Component
 public interface UserMapper {
-
-    User toUser(UserIncomeDto userIncomeDto);
+    User toUserModel(UserDto userModelDto);
 
     UserDto toUserDto(User user);
 
-    static UserShortDto toUserShortDto(User user) {
-        return UserShortDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .build();
-    }
-
-    List<UserResponseDto> toUserResponseDtoList(List<User> users);
+    List<UserDto> toUserDtoList(List<User> usersList);
 }

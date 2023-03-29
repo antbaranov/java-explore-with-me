@@ -1,6 +1,8 @@
 package ru.practicum.mapper;
 
 import org.mapstruct.Mapper;
+import org.springframework.stereotype.Component;
+import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.entity.Category;
@@ -8,16 +10,11 @@ import ru.practicum.entity.Category;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
+@Component
 public interface CategoryMapper {
-
     Category toCategory(NewCategoryDto newCategoryDto);
 
-    static CategoryResponseDto toCategoryResponseDto(Category category) {
-        return CategoryResponseDto.builder()
-                .id(category.getId())
-                .name(category.getName())
-                .build();
-    }
+    CategoryDto toCategoryDto(Category category);
 
-    List<CategoryResponseDto> toCategoryResponseDtoList(List<Category> categories);
+    List<CategoryDto> toCategoryDtoList(List<Category> categoryList);
 }

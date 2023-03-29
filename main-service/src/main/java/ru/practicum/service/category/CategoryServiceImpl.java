@@ -2,59 +2,65 @@ package ru.practicum.service.category;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.category.CategoryResponseDto;
+import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.entity.Category;
-import ru.practicum.exception.NotFoundException;
+import ru.practicum.exceptions.CategoryIsNotEmptyException;
+import ru.practicum.exceptions.CategoryNotExistException;
+import ru.practicum.exceptions.NameAlreadyExistException;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.repository.CategoryRepository;
+import ru.practicum.repository.EventRepository;
+
 
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
-
+    private final EventRepository eventRepository;
     private final CategoryMapper categoryMapper;
 
     @Override
-    public CategoryResponseDto create(NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
+    public CategoryDto createCategory(NewCategoryDto newCategoryDto) {
+        if (categoryRepository.existsByName(newCategoryDto.getName())) {
+            throw new NameAlreadyExistException(String.format("Can't create category because name: %s already used by another category", newCategoryDto.getName()));
+        }
+        return categoryMapper.toCategoryDto(categoryRepository.save(categoryMapper.toCategory(newCategoryDto)));
     }
 
     @Override
-    public void deleteById(Long catId) {
-        findById(catId);
+    public List<CategoryDto> getCategories(Integer from, Integer size) {
+        Pageable page = PageRequest.of(from / size, size);
+        return categoryMapper.toCategoryDtoList(categoryRepository.findAll(page).toList());
+    }
+
+    @Override
+    public CategoryDto getCategory(Long catId) {
+        Category category = categoryRepository.findById(catId)
+                .orElseThrow(() -> new CategoryNotExistException("Category doesn't exist"));
+        return categoryMapper.toCategoryDto(category);
+    }
+
+    @Override
+    public void deleteCategory(Long catId) {
+        if (eventRepository.existsByCategoryId(catId)) {
+            throw new CategoryIsNotEmptyException("The category is not empty");
+        }
         categoryRepository.deleteById(catId);
     }
 
     @Override
-    public CategoryResponseDto update(Long catId, NewCategoryDto newCategoryDto) {
-        Category category = categoryMapper.toCategory(newCategoryDto);
-        category.setId(catId);
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.save(category));
-    }
-
-    @Override
-    public List<CategoryResponseDto> findCategories(int from, int size) {
-        return categoryMapper.toCategoryResponseDtoList(categoryRepository.findAll(PageRequest.of(from, size)).toList());
-    }
-
-    @Override
-    public CategoryResponseDto findById(Long id) {
-        return CategoryMapper.toCategoryResponseDto(categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category with id=" + id)));
-    }
-
-    @Override
-    public Category findByIdCreate(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category with id=" + id));
+    public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(catId)
+                .orElseThrow(() -> new CategoryNotExistException("Category doesn't exist"));
+        if (categoryRepository.existsByName(categoryDto.getName())) {
+            throw new NameAlreadyExistException(String.format("Can't update category because name: %s already used by another category", categoryDto.getName()));
+        }
+        category.setName(categoryDto.getName());
+        return categoryMapper.toCategoryDto(categoryRepository.save(category));
     }
 }

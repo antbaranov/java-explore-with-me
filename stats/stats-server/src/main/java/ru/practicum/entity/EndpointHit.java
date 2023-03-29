@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -28,7 +29,7 @@ public class EndpointHit {
     private String app;
     private String uri;
     private String ip;
-    private Timestamp timestamp;
+    private LocalDateTime timestamp;
 
     @Override
     public boolean equals(Object o) {

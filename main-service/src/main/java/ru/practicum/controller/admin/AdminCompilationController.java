@@ -1,7 +1,6 @@
 package ru.practicum.controller.admin;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,50 +11,35 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.dto.compliiation.CompilationDto;
-import ru.practicum.dto.compliiation.NewCompilationDto;
+import ru.practicum.dto.compilation.CompilationDto;
+import ru.practicum.dto.compilation.NewCompilationDto;
+import ru.practicum.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.service.compilation.CompilationService;
-import ru.practicum.validation.group.Create;
-import ru.practicum.validation.group.Update;
 
-import javax.validation.constraints.Min;
 
-@Validated
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/admin/compilations")
+@Validated
 @RequiredArgsConstructor
-@Slf4j
 public class AdminCompilationController {
-
     private final CompilationService compilationService;
 
-    /**
-     * Добавление новой подборки
-     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationDto createCompilation(@Validated(Create.class) @RequestBody NewCompilationDto dto) {
-        log.info("Create {}", dto.toString());
-        return compilationService.create(dto);
+    public CompilationDto createCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
+        return compilationService.createCompilation(newCompilationDto);
     }
 
-    /**
-     * Удаление подборки
-     */
-    @DeleteMapping("{compId}")
+    @PatchMapping("/{compId}")
+    public CompilationDto createCompilation(@PathVariable Long compId, @Valid @RequestBody UpdateCompilationRequest updateCompilationRequest) {
+        return compilationService.updateCompilation(compId, updateCompilationRequest);
+    }
+
+    @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCompilation(@PathVariable @Min(0) Long compId) {
-        log.info("Delete by id={}", compId);
-        compilationService.delete(compId);
-    }
-
-    /**
-     * Обновление подборки
-     */
-    @PatchMapping("{compId}")
-    public CompilationDto update(@Validated(Update.class) @RequestBody NewCompilationDto dto,
-                                 @PathVariable @Min(0) Long compId) {
-        log.info("Update by id={}, for {}", compId, dto.toString());
-        return compilationService.update(compId, dto);
+    public void deleteCompilation(@PathVariable Long compId) {
+        compilationService.deleteCompilation(compId);
     }
 }

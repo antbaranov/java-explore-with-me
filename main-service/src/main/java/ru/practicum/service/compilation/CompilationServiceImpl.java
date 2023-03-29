@@ -1,66 +1,120 @@
 package ru.practicum.service.compilation;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.dto.compliiation.CompilationDto;
-import ru.practicum.dto.compliiation.NewCompilationDto;
+
+import ru.practicum.dto.compilation.CompilationDto;
+import ru.practicum.dto.compilation.UpdateCompilationRequest;
+import ru.practicum.dto.compilation.NewCompilationDto;
 import ru.practicum.entity.Compilation;
 import ru.practicum.entity.Event;
-import ru.practicum.exception.NotFoundException;
+import ru.practicum.exceptions.CompilationNotExistException;
 import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.repository.CompilationRepository;
+import ru.practicum.repository.EventRepository;
 import ru.practicum.service.event.EventService;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class CompilationServiceImpl implements CompilationService {
-
-    private final CompilationRepository compilationRepository;
+    private final EventRepository eventRepository;
     private final EventService eventService;
-
-    private final CompilationMapper compilationMapper;
+    private final EntityManager entityManager;
+    private final CompilationRepository compilationRepository;
+    private final CompilationMapper mapper;
 
     @Override
-    public List<CompilationDto> getAll(boolean pinned, int from, int size) {
-        return compilationMapper.toCompilationDtoList(compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size)));
+    @Transactional
+    public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
+        List<Event> events = eventRepository.findAllByIdIn(newCompilationDto.getEvents());
+        Compilation compilation = new Compilation();
+        compilation.setEvents(new HashSet<>(events));
+        compilation.setPinned(newCompilationDto.getPinned());
+        compilation.setTitle(newCompilationDto.getTitle());
+
+        Compilation savedCompilation = compilationRepository.save(compilation);
+        log.debug("Compilation is created");
+        setView(savedCompilation);
+        return mapper.mapToCompilationDto(savedCompilation);
+    }
+
+    public CompilationDto getCompilation(Long compId) {
+        Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotExistException("Compilation doesn't exist"));
+        return mapper.mapToCompilationDto(compilation);
     }
 
     @Override
-    public CompilationDto create(NewCompilationDto dto) {
-        Compilation compilation = CompilationMapper.toCompilation(dto);
-        compilation.setEvents(new HashSet<>(eventService.getAll(
-                compilation.getEvents().stream()
-                        .map(Event::getId)
-                        .collect(Collectors.toList())
-        )));
+    public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Compilation> query = builder.createQuery(Compilation.class);
 
-        return compilationMapper.toCompilationDto(compilationRepository.save(compilation));
+        Root<Compilation> root = query.from(Compilation.class);
+        Predicate criteria = builder.conjunction();
+
+        if (pinned != null) {
+            Predicate isPinned;
+            if (pinned) {
+                isPinned = builder.isTrue(root.get("pinned"));
+            } else {
+                isPinned = builder.isFalse(root.get("pinned"));
+            }
+            criteria = builder.and(criteria, isPinned);
+        }
+
+        query.select(root).where(criteria);
+        List<Compilation> compilations = entityManager.createQuery(query)
+                .setFirstResult(from)
+                .setMaxResults(size)
+                .getResultList();
+
+        return mapper.mapToListCompilationDto(compilations);
     }
 
-    @Override
-    public CompilationDto update(Long compId, NewCompilationDto dto) {
-        Compilation compilation = CompilationMapper.toCompilation(dto);
-        Compilation recipient = compilationMapper.toCompilationUpd(getById(compId));
-        return compilationMapper.toCompilationDto(
-                compilationRepository.save(CompilationMapper.update(recipient, compilation)));
+    @Transactional
+    public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
+
+        Compilation oldCompilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotExistException("Can't update compilation - the compilation doesn't exist"));
+        List<Long> eventsIds = updateCompilationRequest.getEvents();
+        if (eventsIds != null) {
+            List<Event> events = eventRepository.findAllByIdIn(updateCompilationRequest.getEvents());
+            oldCompilation.setEvents(new HashSet<>(events));
+        }
+        if (updateCompilationRequest.getPinned() != null) {
+            oldCompilation.setPinned(updateCompilationRequest.getPinned());
+        }
+        if (updateCompilationRequest.getTitle() != null) {
+            oldCompilation.setTitle(updateCompilationRequest.getTitle());
+        }
+        Compilation updatedCompilation = compilationRepository.save(oldCompilation);
+        log.debug("Compilation with ID = {} is updated", compId);
+        setView(updatedCompilation);
+        return mapper.mapToCompilationDto(updatedCompilation);
     }
 
-    @Override
-    public void delete(Long compId) {
-        getById(compId);
+    @Transactional
+    public void deleteCompilation(Long compId) {
         compilationRepository.deleteById(compId);
+        log.debug("Compilation with ID = {} is deleted", compId);
     }
 
-    @Override
-    public CompilationDto getById(Long compId) {
-        return compilationMapper.toCompilationDto(compilationRepository.findById(compId).orElseThrow(
-                () -> new NotFoundException("List with id=" + compId)));
+    private void setView(Compilation compilation) {
+        Set<Event> setEvents = compilation.getEvents();
+        if (!setEvents.isEmpty()) {
+            List<Event> events = new ArrayList<>(setEvents);
+            eventService.setView(events);
+        }
     }
 }

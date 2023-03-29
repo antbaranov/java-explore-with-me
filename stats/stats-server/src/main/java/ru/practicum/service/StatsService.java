@@ -4,6 +4,7 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface StatsService {
@@ -12,5 +13,5 @@ public interface StatsService {
 
     EndpointHitDto createHit(EndpointHitDto endpointHitDto);
 
-    List<ViewStatsDto> getStats(Timestamp start, Timestamp end, List<String> uris, boolean unique);
+    List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique);
 }

@@ -1,44 +1,31 @@
 package ru.practicum.controller.pub;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.compliiation.CompilationDto;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.dto.compilation.CompilationDto;
 import ru.practicum.service.compilation.CompilationService;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping("/compilations")
 @RequiredArgsConstructor
-@Slf4j
 public class PublicCompilationController {
-
     private final CompilationService compilationService;
 
-    /**
-     * Получение подборок событий
-     */
-    @GetMapping
-    public List<CompilationDto> getAll(
-            @RequestParam(required = false) boolean pinned,
-            @PositiveOrZero @RequestParam(defaultValue = "0", required = false) @Min(0) int from,
-            @Positive @RequestParam(defaultValue = "10", required = false) @Min(1) int size) {
-        log.info("GET compilations pinned={}, from={}, size={}", pinned, from, size);
-        return compilationService.getAll(pinned, from, size);
+    @GetMapping("/{compId}")
+    public CompilationDto getCompilation(@PathVariable Long compId) {
+        return compilationService.getCompilation(compId);
     }
 
-    /**
-     * Получение подборки события по его id
-     */
-    @GetMapping("{compId}")
-    public CompilationDto getById(@PathVariable @Min(0) Long compId) {
-        log.info("GET compilation compId={}", compId);
-        return compilationService.getById(compId);
+    @GetMapping
+    public List<CompilationDto> getCompilations(@RequestParam(name = "pinned", required = false) Boolean pinned,
+                                                @RequestParam(name = "from", required = false, defaultValue = "0") Integer from,
+                                                @RequestParam(name = "size", required = false, defaultValue = "10") Integer size) {
+        return compilationService.getCompilations(pinned, from, size);
     }
 }

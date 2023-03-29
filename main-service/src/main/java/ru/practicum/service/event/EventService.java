@@ -3,42 +3,32 @@ package ru.practicum.service.event;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
-import ru.practicum.dto.event.UpdateEventAdminRequest;
-import ru.practicum.dto.event.UpdateEventUserRequest;
+import ru.practicum.dto.event.UpdateEventAdminDto;
+import ru.practicum.dto.event.UpdateEventUserDto;
 import ru.practicum.entity.Event;
-import ru.practicum.entity.SortEvent;
-import ru.practicum.entity.State;
+import ru.practicum.enums.EventState;
+import ru.practicum.enums.SortValue;
 
-import java.sql.Timestamp;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 public interface EventService {
+    EventFullDto createEvent(Long userId, NewEventDto newEventDto);
 
-    EventFullDto create(Long userId, NewEventDto dto);
+    List<EventShortDto> getEvents(Long userId, Integer from, Integer size);
 
-    Event save(Event event);
+    EventFullDto updateEvent(Long eventId, UpdateEventAdminDto updateEventAdminDto);
 
-    EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest dto);
+    EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto);
 
-    List<EventShortDto> getAll(Long userId, int from, int size);
+    EventFullDto getEventByUser(Long userId, Long eventId);
 
-    List<Event> getAll(List<Long> eventIds);
+    List<EventFullDto> getEventsWithParamsByAdmin(List<Long> users, EventState states, List<Long> categoriesId, String rangeStart, String rangeEnd, Integer from, Integer size);
 
-    List<EventFullDto> getAllByParameters(List<Long> users, List<State> states, List<Long> categories,
-                                          Timestamp rangeStart, Timestamp rangeEnd, int from, int size);
+    List<EventFullDto> getEventsWithParamsByUser(String text, List<Long> categories, Boolean paid, String rangeStart,
+                                                 String rangeEnd, Boolean onlyAvailable, SortValue sort, Integer from, Integer size, HttpServletRequest request);
 
-    List<EventShortDto> getAllByParametersPublic(String text, List<Long> categories, Boolean paid, Timestamp rangeStart,
-                                         Timestamp rangeEnd, Boolean onlyAvailable, SortEvent sort, int from, int size);
+    EventFullDto getEvent(Long id, HttpServletRequest request);
 
-    EventFullDto getUserEventById(Long eventId, Long userId);
-
-    Event getUserEventByIdUpdate(Long eventId, Long userId);
-
-
-    Event getById(Long eventId);
-
-    EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequest updateAdminDto);
-
-    Optional<Event> getByIdForRequest(Long eventId);
+    void setView(List<Event> events);
 }

@@ -8,12 +8,9 @@ import ru.practicum.entity.User;
 import java.util.List;
 
 public interface UserService {
+    UserDto createUser(UserDto userModelDto);
 
-    UserDto create(UserIncomeDto userIncomeDto);
+    List<UserDto> getUsers(List<Long> ids, Integer from, Integer size);
 
-    List<UserResponseDto> getUsers(List<Long> ids, int from, int size);
-
-    User getById(Long userId);
-
-    void deleteById(Long userId);
+    void deleteUser(Long id);
 }

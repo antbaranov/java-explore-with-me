@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,7 +20,7 @@ public class EndpointHitDto {
     private String app;
     private String uri;
     private String ip;
-    private Timestamp timestamp;
+    private String timestamp;
 
     @JsonIgnore
     public static EndpointHitDto fromHttpServletRequest(HttpServletRequest request, String appName) {
@@ -29,7 +28,7 @@ public class EndpointHitDto {
                 .app(appName)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
-                .timestamp(Timestamp.valueOf(LocalDateTime.now()))
+                .timestamp(String.valueOf(LocalDateTime.now()))
                 .build();
     }
 }

@@ -1,12 +1,15 @@
 package ru.practicum.entity;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.validation.AfterNow;
+import ru.practicum.enums.EventState;
+import ru.practicum.util.Pattern;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,70 +18,83 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Entity
-@Table(name = "events")
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
+@Entity
+@Table(name = "events")
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false)
     private String annotation;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
-    @Column(nullable = false)
-    private Integer confirmedRequests;
-    @Column(nullable = false)
-    private Timestamp createdOn;
-    @Column(nullable = false)
+
+    private int confirmedRequests;
+    @Column(name = "created_On")
+    private LocalDateTime createdOn;
     private String description;
-    @Column(nullable = false)
-    @AfterNow
-    private Timestamp eventDate;
-    @ManyToOne
-    @JoinColumn(name = "initiator_id", nullable = false)
+
+    private LocalDateTime eventDate;
+    @OneToOne
+    @JoinColumn(name = "initiator_id", referencedColumnName = "id")
     private User initiator;
-    @ManyToOne
-    @JoinColumn(name = "location_id", nullable = false)
+    @OneToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "location_id", referencedColumnName = "id")
     private Location location;
-    @Column(nullable = false)
     private Boolean paid;
-    @Column(name = "participant_limit", nullable = false)
-    private Integer participantLimit;
-    @Column(name = "published_on")
-    private Timestamp publishedOn;
-    @Column(name = "request_moderation", nullable = false)
+    private int participantLimit;
+    private LocalDateTime publishedOn;
     private Boolean requestModeration;
     @Enumerated(EnumType.STRING)
-    private State state;
-    @Column(nullable = false)
+    private EventState state;
     private String title;
-    @Column(nullable = false)
     private Long views;
+    @Transient
+    private final String datePattern = Pattern.DATE;
+    @Transient
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    public long getConfirmedRequest() {
-        return confirmedRequests;
-    }
+    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid, Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState, String title, Long views) {
+        this.annotation = annotation;
+        this.category = category;
+        this.confirmedRequests = confirmedRequests;
+        if (createdOn == null) {
+            this.createdOn = LocalDateTime.now();
+        } else {
+            this.createdOn = createdOn;
+        }
 
-    public Long getViews() {
-        return views;
-    }
-
-    public void setConfirmedRequest(int confirmedRequest) {
-        this.confirmedRequests = confirmedRequest;
-    }
-
-    public void setViews(long views) {
+        this.description = description;
+        this.eventDate = eventDate;
+        this.id = id;
+        this.initiator = initiator;
+        this.location = location;
+        this.paid = paid;
+        this.participantLimit = participantLimit;
+        this.publishedOn = publishedOn;
+        if (requestModeration == null) {
+            this.requestModeration = true;
+        } else {
+            this.requestModeration = requestModeration;
+        }
+        if (eventState == null) {
+            this.state = EventState.PENDING;
+        } else {
+            this.state = eventState;
+        }
+        this.title = title;
         this.views = views;
     }
 }

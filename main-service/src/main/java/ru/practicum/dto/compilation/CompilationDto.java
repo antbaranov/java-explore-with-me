@@ -1,19 +1,19 @@
-package ru.practicum.dto.compliiation;
+package ru.practicum.dto.compilation;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.dto.event.EventShortDto;
 
-import java.util.Set;
+
+import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
 public class CompilationDto {
-
-    private Set<EventShortDto> events;
     private Long id;
     private Boolean pinned;
     private String title;
+    private List<EventShortDto> events;
 }

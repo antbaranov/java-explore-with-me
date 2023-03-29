@@ -2,25 +2,26 @@ package ru.practicum.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import ru.practicum.entity.Request;
-import ru.practicum.entity.Status;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
+    @Query("select p from Request as p " +
+            "join Event as e ON p.event = e.id " +
+            "where p.event = :eventId and e.initiator.id = :userId")
+    List<Request> findAllByEventWithInitiator(@Param(value = "userId") Long userId,
+                                              @Param("eventId") Long eventId);
 
-    List<Request> findAllByRequesterId(Long id);
+    Boolean existsByRequesterAndEvent(Long userId, Long eventId);
 
-    List<Request> findAllByEventId(Long eventId);
+    List<Request> findAllByRequester(Long userId);
 
-    @Query("SELECT  count(r.id) " +
-            "FROM Request AS r " +
-            "WHERE r.event.id = :eventId " +
-            "AND r.status = :status")
-    Optional<Integer> findCountRequestByEventIdAndStatus(Long eventId, Status status);
+    List<Request> findAllByEvent(Long eventId);
 
-    @Query("select r.event.id, count(r) from Request r where r.event.id in ?1 and r.status = ?2 group by r.event.id")
-    Map<Long, Integer> findAllConfirmedRequestsByEventIds(List<Long> ids, Status status);
+    Optional<Request> findByRequesterAndId(Long userId, Long requestId);
 }
