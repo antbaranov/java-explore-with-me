@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.entity.Location;
-import ru.practicum.util.Pattern;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+
+import static ru.practicum.util.Constants.DATE;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,10 +24,10 @@ public class NewEventDto {
     @NotNull
     private Long category;
     @NotNull
-    @Size(min = 20, max = 2000)
+    @Size(min = 20, max = 5000)
     private String description;
     @NotNull
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE)
     private LocalDateTime eventDate;
     @NotNull
     private Location location;

@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.practicum.util.Pattern;
 
 
 import java.time.LocalDateTime;
+
+import static ru.practicum.util.Constants.DATE;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Setter
 public class RequestDto {
     private Long id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE)
     private LocalDateTime created;
     private Long event;
     private Long requester;

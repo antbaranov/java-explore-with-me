@@ -9,7 +9,7 @@ import ru.practicum.enums.RequestStatus;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-import static ru.practicum.util.Constants.DATE_TIME;
+import static ru.practicum.util.Constants.DATE;
 
 @Getter
 @Setter
@@ -21,6 +21,6 @@ public class ParticipationRequestDto {
     @NotNull
     private Long requester;
     private RequestStatus status;
-    @JsonFormat(pattern = DATE_TIME)
+    @JsonFormat(pattern = DATE)
     private LocalDateTime created;
 }

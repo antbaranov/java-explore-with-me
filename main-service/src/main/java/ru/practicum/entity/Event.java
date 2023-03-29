@@ -1,13 +1,10 @@
 package ru.practicum.entity;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.enums.EventState;
-import ru.practicum.util.Pattern;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,14 +21,13 @@ import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static ru.practicum.util.Constants.DATE;
+
 @Getter
 @Setter
 @Entity
 @Table(name = "events")
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,11 +58,13 @@ public class Event {
     private String title;
     private Long views;
     @Transient
-    private final String datePattern = Pattern.DATE;
+    private final String datePattern = DATE;
     @Transient
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn, String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid, Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState, String title, Long views) {
+    public Event(Long id, String annotation, Category category, int confirmedRequests, LocalDateTime createdOn,
+                 String description, LocalDateTime eventDate, User initiator, Location location, Boolean paid,
+                 Integer participantLimit, LocalDateTime publishedOn, Boolean requestModeration, EventState eventState, String title, Long views) {
         this.annotation = annotation;
         this.category = category;
         this.confirmedRequests = confirmedRequests;

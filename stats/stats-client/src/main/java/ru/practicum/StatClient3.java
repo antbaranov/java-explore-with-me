@@ -19,11 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class StatClient2 {
+public class StatClient3 {
     private final String serverUrl;
     private final RestTemplate restTemplate;
 
-    public StatClient2(@Value("${stats-server.url}") String serverUrl, RestTemplate restTemplate) {
+    public StatClient3(@Value("${stats-server.url}") String serverUrl, RestTemplate restTemplate) {
         this.serverUrl = serverUrl;
         this.restTemplate = restTemplate;
     }

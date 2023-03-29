@@ -3,7 +3,6 @@ package ru.practicum.mapper;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 import ru.practicum.dto.category.CategoryDto;
-import ru.practicum.dto.category.CategoryResponseDto;
 import ru.practicum.dto.category.NewCategoryDto;
 import ru.practicum.entity.Category;
 

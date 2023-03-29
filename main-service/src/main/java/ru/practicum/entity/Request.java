@@ -30,5 +30,4 @@ public class Request {
     private Long requester;
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
-
 }

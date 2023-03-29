@@ -1,7 +1,6 @@
 package ru.practicum.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,19 +17,16 @@ import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
-@Table(name = "compilations")
+@Table(name = "compilations", schema = "public")
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Boolean pinned;
-
     private String title;
     @ManyToMany
     @JoinTable(name = "compilations_events",

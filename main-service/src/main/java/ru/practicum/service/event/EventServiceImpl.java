@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.StatClient2;
+import ru.practicum.StatClient3;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.dto.event.EventFullDto;
@@ -29,7 +29,6 @@ import ru.practicum.mapper.EventMapper;
 import ru.practicum.repository.CategoryRepository;
 import ru.practicum.repository.EventRepository;
 import ru.practicum.repository.UserRepository;
-import ru.practicum.util.Pattern;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -46,6 +45,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static ru.practicum.util.Constants.DATE;
+
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -53,9 +54,9 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
-    private final StatClient2 statClient;
+    private final StatClient3 statClient;
     private final EntityManager entityManager;
-    private final String datePattern = Pattern.DATE;
+    private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
     @Override
@@ -403,8 +404,8 @@ public class EventServiceImpl implements EventService {
             event.setViews(0L);
         }
 
-        String startTime = start.format(DateTimeFormatter.ofPattern(Pattern.DATE));
-        String endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(Pattern.DATE));
+        String startTime = start.format(DateTimeFormatter.ofPattern(DATE));
+        String endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE));
 
         List<ViewStatsDto> stats = getStats(startTime, endTime, uris);
         stats.forEach((stat) ->

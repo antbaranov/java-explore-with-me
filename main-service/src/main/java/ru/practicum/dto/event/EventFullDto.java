@@ -9,10 +9,10 @@ import ru.practicum.dto.category.CategoryDto;
 import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.entity.Location;
 import ru.practicum.enums.EventState;
-import ru.practicum.util.Pattern;
-
 
 import java.time.LocalDateTime;
+
+import static ru.practicum.util.Constants.DATE;
 
 
 @NoArgsConstructor
@@ -23,18 +23,20 @@ public class EventFullDto {
     private String annotation;
     private CategoryDto category;
     private Integer confirmedRequests;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE)
     private String createdOn;
     private String description;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE)
     private LocalDateTime eventDate;
     private Long id;
     private UserShortDto initiator;
     private Location location;
     private Boolean paid;
     private Long participantLimit;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Pattern.DATE)
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE)
     private LocalDateTime publishedOn;
     private Boolean requestModeration;
     private EventState state;

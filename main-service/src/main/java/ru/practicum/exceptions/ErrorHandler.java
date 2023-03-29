@@ -1,4 +1,4 @@
-package ru.practicum;
+package ru.practicum.exceptions;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -27,14 +27,15 @@ import ru.practicum.exceptions.RequestNotExistException;
 import ru.practicum.exceptions.UserNotExistException;
 import ru.practicum.exceptions.WrongTimeException;
 import ru.practicum.exceptions.WrongUserException;
-import ru.practicum.util.Pattern;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static ru.practicum.util.Constants.DATE;
+
 @RestControllerAdvice
 public class ErrorHandler {
-    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(Pattern.DATE);
+    private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(DATE);
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
