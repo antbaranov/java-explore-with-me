@@ -51,7 +51,8 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     public CompilationDto getCompilation(Long compId) {
-        Compilation compilation = compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotExistException("Compilation doesn't exist"));
+        Compilation compilation = compilationRepository.findById(compId)
+                .orElseThrow(() -> new CompilationNotExistException("Compilation doesn't exist"));
         return mapper.mapToCompilationDto(compilation);
     }
 
