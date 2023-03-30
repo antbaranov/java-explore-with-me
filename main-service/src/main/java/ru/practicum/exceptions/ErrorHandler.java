@@ -9,24 +9,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.entity.ApiError;
-import ru.practicum.exceptions.AlreadyPublishedException;
-
-import ru.practicum.exceptions.CategoryIsNotEmptyException;
-import ru.practicum.exceptions.CategoryNotExistException;
-import ru.practicum.exceptions.CommentConflictException;
-import ru.practicum.exceptions.CommentNotExistException;
-import ru.practicum.exceptions.CompilationNotExistException;
-import ru.practicum.exceptions.EventAlreadyCanceledException;
-import ru.practicum.exceptions.EventIsNotPublishedException;
-import ru.practicum.exceptions.EventNotExistException;
-import ru.practicum.exceptions.NameAlreadyExistException;
-import ru.practicum.exceptions.ParticipantLimitException;
-import ru.practicum.exceptions.RequestAlreadyConfirmedException;
-import ru.practicum.exceptions.RequestAlreadyExistException;
-import ru.practicum.exceptions.RequestNotExistException;
-import ru.practicum.exceptions.UserNotExistException;
-import ru.practicum.exceptions.WrongTimeException;
-import ru.practicum.exceptions.WrongUserException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

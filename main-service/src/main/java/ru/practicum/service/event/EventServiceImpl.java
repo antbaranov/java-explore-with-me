@@ -49,7 +49,7 @@ import static ru.practicum.util.Constants.DATE;
 
 @Service
 @RequiredArgsConstructor
-public class EventServiceImpl implements EventService {
+public class EventServiceImpl implements ru.practicum.service.event.EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;

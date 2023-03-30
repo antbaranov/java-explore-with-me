@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.client.RestTemplate;
 
-@SpringBootApplication
+//@SpringBootApplication(scanBasePackages = {"ru.practicum.stats-client", "ru.practicum.main-service"})
 //@ComponentScan(basePackages = "ru.practicum")
+@SpringBootApplication(scanBasePackages = {"ru.practicum.stats-client", "ru.practicum.main-service"})
 public class EwmMainService {
     public static void main(String[] args) {
-
         SpringApplication.run(EwmMainService.class, args);
     }
 
