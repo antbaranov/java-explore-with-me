@@ -260,7 +260,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventFullDto> getEventsWithParamsByUser(String text, List<Long> categories, Boolean paid, String rangeStart,
-                                                        String rangeEnd, Boolean onlyAvailable, SortValue sort, Integer from, Integer size, HttpServletRequest request) {
+                                                        String rangeEnd, Boolean onlyAvailable, SortValue sort,
+                                                        Integer from, Integer size, HttpServletRequest request) {
         LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, dateFormatter) : null;
         LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, dateFormatter) : null;
 

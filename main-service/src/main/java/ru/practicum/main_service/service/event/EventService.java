@@ -23,10 +23,12 @@ public interface EventService {
 
     EventFullDto getEventByUser(Long userId, Long eventId);
 
-    List<EventFullDto> getEventsWithParamsByAdmin(List<Long> users, EventState states, List<Long> categoriesId, String rangeStart, String rangeEnd, Integer from, Integer size);
+    List<EventFullDto> getEventsWithParamsByAdmin(List<Long> users, EventState states, List<Long> categoriesId,
+                                                  String rangeStart, String rangeEnd, Integer from, Integer size);
 
     List<EventFullDto> getEventsWithParamsByUser(String text, List<Long> categories, Boolean paid, String rangeStart,
-                                                 String rangeEnd, Boolean onlyAvailable, SortValue sort, Integer from, Integer size, HttpServletRequest request);
+                                                 String rangeEnd, Boolean onlyAvailable, SortValue sort, Integer from,
+                                                 Integer size, HttpServletRequest request);
 
     EventFullDto getEvent(Long id, HttpServletRequest request);
 
