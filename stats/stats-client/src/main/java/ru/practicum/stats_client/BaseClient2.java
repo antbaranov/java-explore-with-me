@@ -1,7 +1,5 @@
 package ru.practicum.stats_client;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -11,65 +9,77 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-@Slf4j
 public class BaseClient2 {
-    private final RestTemplate rest;
+    protected final RestTemplate rest;
 
     public BaseClient2(RestTemplate rest) {
         this.rest = rest;
     }
 
-    protected <T> Optional<T> exchange(String path,
-                                       HttpMethod method,
-                                       @Nullable T object,
-                                       ParameterizedTypeReference<T> typeReference,
-                                       Map<String, Object> parameters) {
-        HttpEntity<T> requestEntity = new HttpEntity<>(object, defaultHeaders());
-        ResponseEntity<T> responseEntity;
-        try {
-            if (parameters != null) {
-                responseEntity = rest.exchange(path, method, requestEntity, typeReference, parameters);
-            } else {
-                responseEntity = rest.exchange(path, method, requestEntity, typeReference);
-            }
-        } catch (HttpStatusCodeException e) {
-            log.info(Arrays.toString(e.getStackTrace()));
-            return Optional.empty();
+    private static ResponseEntity<Object> prepareGatewayResponse(ResponseEntity<Object> response) {
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response;
         }
-        log.info(String.join(": ", "ResponseBody", String.valueOf(responseEntity.getBody())));
-        return Optional.ofNullable(responseEntity.getBody());
+
+        ResponseEntity.BodyBuilder responseBuilder = ResponseEntity.status(response.getStatusCode());
+
+        if (response.hasBody()) {
+            return responseBuilder.body(response.getBody());
+        }
+
+        return responseBuilder.build();
     }
 
-    protected <T> Optional<List<T>> exchangeAsList(String path,
-                                                   HttpMethod method,
-                                                   @Nullable List<T> objects,
-                                                   ParameterizedTypeReference<List<T>> typeReference,
-                                                   Map<String, Object> parameters) {
-        HttpEntity<List<T>> requestEntity = new HttpEntity<>(objects, defaultHeaders());
-        ResponseEntity<List<T>> responseEntity;
-        try {
-            if (parameters != null) {
-                responseEntity = rest.exchange(path, method, requestEntity, typeReference, parameters);
-            } else {
-                responseEntity = rest.exchange(path, method, requestEntity, typeReference);
-            }
-        } catch (HttpStatusCodeException e) {
-            log.info(Arrays.toString(e.getStackTrace()));
-            return Optional.empty();
-        }
-        log.info(String.join(": ", "ResponseBody", String.valueOf(responseEntity.getBody())));
-        return Optional.ofNullable(responseEntity.getBody());
+    protected ResponseEntity<Object> get(String path) {
+        return get(path, null, null);
     }
 
-    private HttpHeaders defaultHeaders() {
+    protected ResponseEntity<Object> get(String path, long userId) {
+        return get(path, userId, null);
+    }
+
+    protected ResponseEntity<Object> get(String path, Long userId, @Nullable Map<String, Object> parameters) {
+        return makeAndSendRequest(HttpMethod.GET, path, userId, parameters, null);
+    }
+
+    protected <T> ResponseEntity<Object> post(String path, T body) {
+        return post(path, null, null, body);
+    }
+
+    protected <T> ResponseEntity<Object> post(String path, long userId, T body) {
+        return post(path, userId, null, body);
+    }
+
+    protected <T> ResponseEntity<Object> post(String path, Long userId, @Nullable Map<String, Object> parameters, T body) {
+        return makeAndSendRequest(HttpMethod.POST, path, userId, parameters, body);
+    }
+
+    private <T> ResponseEntity<Object> makeAndSendRequest(HttpMethod method, String path, Long userId, @Nullable Map<String, Object> parameters, @Nullable T body) {
+        HttpEntity<T> requestEntity = new HttpEntity<>(body, defaultHeaders(userId));
+
+        ResponseEntity<Object> serverResponse;
+        try {
+            if (parameters != null) {
+                serverResponse = rest.exchange(path, method, requestEntity, Object.class, parameters);
+            } else {
+                serverResponse = rest.exchange(path, method, requestEntity, Object.class);
+            }
+        } catch (HttpStatusCodeException e) {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsByteArray());
+        }
+        return prepareGatewayResponse(serverResponse);
+    }
+
+    private HttpHeaders defaultHeaders(Long userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        if (userId != null) {
+            headers.set("X-Sharer-User-Id", String.valueOf(userId));
+        }
         return headers;
     }
 }
