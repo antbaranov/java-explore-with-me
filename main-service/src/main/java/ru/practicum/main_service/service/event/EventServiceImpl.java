@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.stats_client.StatClient3;
-import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.main_service.dto.event.EventFullDto;
 import ru.practicum.main_service.dto.event.EventShortDto;
@@ -59,7 +57,7 @@ public class EventServiceImpl implements EventService {
     private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    private final StatisticService statisticService;
+    private final StatisticsServiceImpl statisticService;
 
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
@@ -256,7 +254,7 @@ public class EventServiceImpl implements EventService {
             return new ArrayList<>();
         }
 
-        setView(events);
+        statisticService.setView(events);
         return eventMapper.toEventFullDtoList(events);
     }
 

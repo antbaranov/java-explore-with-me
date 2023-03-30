@@ -19,7 +19,7 @@ import static ru.practicum.main_service.util.Constants.DATE;
 
 @Service
 @RequiredArgsConstructor
-public class StatisticService {
+public class StatisticsServiceImpl {
 
     private final StatClient3 statClient;
     private final String datePattern = DATE;
@@ -74,6 +74,29 @@ public class StatisticService {
             requestDto.setIp(remoteAddr);
             statClient.addStats(requestDto);
         }
+    }
+
+    public void setView(List<Event> events) {
+        LocalDateTime start = events.get(0).getCreatedOn();
+        List<String> uris = new ArrayList<>();
+        Map<String, Event> eventsUri = new HashMap<>();
+        String uri = "";
+        for (Event event : events) {
+            if (start.isBefore(event.getCreatedOn())) {
+                start = event.getCreatedOn();
+            }
+            uri = "/events/" + event.getId();
+            uris.add(uri);
+            eventsUri.put(uri, event);
+            event.setViews(0L);
+        }
+
+        String startTime = start.format(DateTimeFormatter.ofPattern(DATE));
+        String endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE));
+
+        List<ViewStatsDto> stats = getStats(startTime, endTime, uris);
+        stats.forEach((stat) ->
+                eventsUri.get(stat.getUri()).setViews(stat.getHits()));
     }
 
     public void setView(Event event) {

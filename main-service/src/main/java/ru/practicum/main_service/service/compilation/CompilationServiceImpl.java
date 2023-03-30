@@ -3,10 +3,9 @@ package ru.practicum.main_service.service.compilation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import ru.practicum.main_service.dto.compilation.CompilationDto;
-import ru.practicum.main_service.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.main_service.dto.compilation.NewCompilationDto;
+import ru.practicum.main_service.dto.compilation.UpdateCompilationRequest;
 import ru.practicum.main_service.entity.Compilation;
 import ru.practicum.main_service.entity.Event;
 import ru.practicum.main_service.exceptions.CompilationNotExistException;
