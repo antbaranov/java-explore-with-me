@@ -17,7 +17,7 @@ import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
-@Table(name = "compilations", schema = "public")
+@Table(name = "compilations")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -49,15 +49,17 @@ import static ru.practicum.main_service.util.Constants.DATE;
 
 @Service
 @RequiredArgsConstructor
-public class EventServiceImpl implements ru.practicum.main_service.service.event.EventService {
+public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
-    private final StatClient3 statClient;
+
     private final EntityManager entityManager;
     private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
+
+    private final StatisticService statisticService;
 
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
@@ -204,11 +206,13 @@ public class EventServiceImpl implements ru.practicum.main_service.service.event
 
     @Override
     public EventFullDto getEventByUser(Long userId, Long eventId) {
-        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId).orElseThrow(() -> new EventNotExistException("")));
+        return eventMapper.toEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new EventNotExistException("")));
     }
 
     @Override
-    public List<EventFullDto> getEventsWithParamsByAdmin(List<Long> users, EventState states, List<Long> categoriesId, String rangeStart, String rangeEnd, Integer from, Integer size) {
+    public List<EventFullDto> getEventsWithParamsByAdmin(List<Long> users, EventState states, List<Long> categoriesId,
+                                                         String rangeStart, String rangeEnd, Integer from, Integer size) {
         LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, dateFormatter) : null;
         LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, dateFormatter) : null;
 
@@ -327,68 +331,19 @@ public class EventServiceImpl implements ru.practicum.main_service.service.event
         }
 
         setView(events);
-        sendStat(events, request);
+        statisticService.sendStat(events, request);
         return eventMapper.toEventFullDtoList(events);
     }
 
     @Override
     public EventFullDto getEvent(Long id, HttpServletRequest request) {
         Event event = eventRepository.findByIdAndPublishedOnIsNotNull(id).orElseThrow(() -> new EventNotExistException(String.format("Can't find event with id = %s event doesn't exist", id)));
-        setView(event);
-        sendStat(event, request);
+        statisticService.setView(event);
+        statisticService.sendStat(event, request);
         return eventMapper.toEventFullDto(event);
     }
 
-    public void sendStat(Event event, HttpServletRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        String remoteAddr = request.getRemoteAddr();
-        String nameService = "main-service";
-
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
-        requestDto.setApp(nameService);
-        requestDto.setIp(remoteAddr);
-        statClient.addStats(requestDto);
-        sendStatForTheEvent(event.getId(), remoteAddr, now, nameService);
-    }
-
-    public void sendStat(List<Event> events, HttpServletRequest request) {
-        LocalDateTime now = LocalDateTime.now();
-        String remoteAddr = request.getRemoteAddr();
-        String nameService = "main-service";
-
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events");
-        requestDto.setApp(nameService);
-        requestDto.setIp(request.getRemoteAddr());
-        statClient.addStats(requestDto);
-        sendStatForEveryEvent(events, remoteAddr, LocalDateTime.now(), nameService);
-    }
-
-    private void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
-                                     String nameService) {
-        EndpointHitDto requestDto = new EndpointHitDto();
-        requestDto.setTimestamp(now.format(dateFormatter));
-        requestDto.setUri("/events/" + eventId);
-        requestDto.setApp(nameService);
-        requestDto.setIp(remoteAddr);
-        statClient.addStats(requestDto);
-    }
-
-    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
-                                       String nameService) {
-        for (Event event : events) {
-            EndpointHitDto requestDto = new EndpointHitDto();
-            requestDto.setTimestamp(now.format(dateFormatter));
-            requestDto.setUri("/events/" + event.getId());
-            requestDto.setApp(nameService);
-            requestDto.setIp(remoteAddr);
-            statClient.addStats(requestDto);
-        }
-    }
-
+    @Override
     public void setView(List<Event> events) {
         LocalDateTime start = events.get(0).getCreatedOn();
         List<String> uris = new ArrayList<>();
@@ -407,25 +362,8 @@ public class EventServiceImpl implements ru.practicum.main_service.service.event
         String startTime = start.format(DateTimeFormatter.ofPattern(DATE));
         String endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE));
 
-        List<ViewStatsDto> stats = getStats(startTime, endTime, uris);
+        List<ViewStatsDto> stats = statisticService.getStats(startTime, endTime, uris);
         stats.forEach((stat) ->
                 eventsUri.get(stat.getUri()).setViews(stat.getHits()));
-    }
-
-    public void setView(Event event) {
-        String startTime = event.getCreatedOn().format(dateFormatter);
-        String endTime = LocalDateTime.now().format(dateFormatter);
-        List<String> uris = List.of("/events/" + event.getId());
-
-        List<ViewStatsDto> stats = getStats(startTime, endTime, uris);
-        if (stats.size() == 1) {
-            event.setViews(stats.get(0).getHits());
-        } else {
-            event.setViews(0L);
-        }
-    }
-
-    private List<ViewStatsDto> getStats(String startTime, String endTime, List<String> uris) {
-        return statClient.getStats(startTime, endTime, uris, false);
     }
 }

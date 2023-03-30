@@ -6,8 +6,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-//@SpringBootApplication(scanBasePackages = {"ru.practicum.stats-client", "ru.practicum.main-service"})
-//@ComponentScan(basePackages = "ru.practicum")
 @SpringBootApplication(scanBasePackages = {"ru.practicum.stats_client", "ru.practicum.main_service"})
 public class EwmMainService {
     public static void main(String[] args) {
