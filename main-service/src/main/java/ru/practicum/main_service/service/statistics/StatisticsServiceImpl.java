@@ -1,4 +1,4 @@
-package ru.practicum.main_service.service.event;
+package ru.practicum.main_service.service.statistics;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package ru.practicum.main_service.service.event;
+package ru.practicum.main_service.service.statistics;
 
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.main_service.entity.Event;

@@ -27,6 +27,7 @@ import ru.practicum.main_service.mapper.EventMapper;
 import ru.practicum.main_service.repository.CategoryRepository;
 import ru.practicum.main_service.repository.EventRepository;
 import ru.practicum.main_service.repository.UserRepository;
+import ru.practicum.main_service.service.statistics.StatisticsService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
