@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-import static ru.practicum.main_service.util.Constants.DATE;
+import static ru.practicum.stats_server.util.Constants.DATE;
 
 @Entity
 @Table(name = "hits")

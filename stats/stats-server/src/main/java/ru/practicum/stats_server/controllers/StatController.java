@@ -12,7 +12,8 @@ import ru.practicum.stats_server.services.StatService;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static ru.practicum.main_service.util.Constants.DATE;
+import static ru.practicum.stats_server.util.Constants.DATE;
+
 
 @RestController
 @RequiredArgsConstructor
