@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.main_service.entity.Event;
-import ru.practicum.stats_client.StatClient3;
+import ru.practicum.stats_client.StatClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ import static ru.practicum.main_service.util.Constants.DATE;
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
-    private final StatClient3 statClient;
+    private final StatClient statClient;
     private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
