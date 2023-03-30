@@ -19,13 +19,13 @@ import static ru.practicum.main_service.util.Constants.DATE;
 
 @Service
 @RequiredArgsConstructor
-public class StatisticsServiceImpl {
+public class StatisticsServiceImpl implements StatisticsService {
 
     private final StatClient3 statClient;
     private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-
+    @Override
     public void sendStat(Event event, HttpServletRequest request) {
         LocalDateTime now = LocalDateTime.now();
         String remoteAddr = request.getRemoteAddr();
@@ -40,6 +40,7 @@ public class StatisticsServiceImpl {
         sendStatForTheEvent(event.getId(), remoteAddr, now, nameService);
     }
 
+    @Override
     public void sendStat(List<Event> events, HttpServletRequest request) {
         LocalDateTime now = LocalDateTime.now();
         String remoteAddr = request.getRemoteAddr();
@@ -54,8 +55,9 @@ public class StatisticsServiceImpl {
         sendStatForEveryEvent(events, remoteAddr, LocalDateTime.now(), nameService);
     }
 
-    private void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
-                                     String nameService) {
+    @Override
+    public void sendStatForTheEvent(Long eventId, String remoteAddr, LocalDateTime now,
+                                    String nameService) {
         EndpointHitDto requestDto = new EndpointHitDto();
         requestDto.setTimestamp(now.format(dateFormatter));
         requestDto.setUri("/events/" + eventId);
@@ -64,8 +66,9 @@ public class StatisticsServiceImpl {
         statClient.addStats(requestDto);
     }
 
-    private void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
-                                       String nameService) {
+    @Override
+    public void sendStatForEveryEvent(List<Event> events, String remoteAddr, LocalDateTime now,
+                                      String nameService) {
         for (Event event : events) {
             EndpointHitDto requestDto = new EndpointHitDto();
             requestDto.setTimestamp(now.format(dateFormatter));
@@ -76,6 +79,7 @@ public class StatisticsServiceImpl {
         }
     }
 
+    @Override
     public void setView(List<Event> events) {
         LocalDateTime start = events.get(0).getCreatedOn();
         List<String> uris = new ArrayList<>();
@@ -99,6 +103,7 @@ public class StatisticsServiceImpl {
                 eventsUri.get(stat.getUri()).setViews(stat.getHits()));
     }
 
+    @Override
     public void setView(Event event) {
         String startTime = event.getCreatedOn().format(dateFormatter);
         String endTime = LocalDateTime.now().format(dateFormatter);
@@ -112,6 +117,7 @@ public class StatisticsServiceImpl {
         }
     }
 
+    @Override
     public List<ViewStatsDto> getStats(String startTime, String endTime, List<String> uris) {
         return statClient.getStats(startTime, endTime, uris, false);
     }

@@ -57,7 +57,7 @@ public class EventServiceImpl implements EventService {
     private final String datePattern = DATE;
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    private final StatisticsServiceImpl statisticService;
+    private final StatisticsService statisticService;
 
     @Override
     public EventFullDto createEvent(Long userId, NewEventDto newEventDto) {
