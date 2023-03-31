@@ -10,10 +10,7 @@ import ru.practicum.stats_client.StatClient;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static ru.practicum.main_service.util.Constants.DATE;
 
@@ -77,30 +74,6 @@ public class StatisticsServiceImpl implements StatisticsService {
             requestDto.setIp(remoteAddr);
             statClient.addStats(requestDto);
         }
-    }
-
-    @Override
-    public void setView(List<Event> events) {
-        LocalDateTime start = events.get(0).getCreatedOn();
-        List<String> uris = new ArrayList<>();
-        Map<String, Event> eventsUri = new HashMap<>();
-        String uri = "";
-        for (Event event : events) {
-            if (start.isBefore(event.getCreatedOn())) {
-                start = event.getCreatedOn();
-            }
-            uri = "/events/" + event.getId();
-            uris.add(uri);
-            eventsUri.put(uri, event);
-            event.setViews(0L);
-        }
-
-        String startTime = start.format(DateTimeFormatter.ofPattern(DATE));
-        String endTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE));
-
-        List<ViewStatsDto> stats = getStats(startTime, endTime, uris);
-        stats.forEach((stat) ->
-                eventsUri.get(stat.getUri()).setViews(stat.getHits()));
     }
 
     @Override
