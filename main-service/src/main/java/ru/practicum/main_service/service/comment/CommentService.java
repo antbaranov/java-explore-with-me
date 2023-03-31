@@ -11,6 +11,7 @@ public interface CommentService {
     CommentDto createComment(NewCommentDto newCommentDto, Long userId, Long eventId);
 
     CommentDto updateCommentByUser(NewCommentDto newCommentDto, Long userId, Long commentId);
+
     CommentDto updateCommentByAdmin(NewCommentDto newCommentDto, Long commentId);
 
     CommentDto getCommentsByIdByUser(Long userId, Long commentId);
@@ -18,7 +19,10 @@ public interface CommentService {
     List<CommentDto> getUserCommentsByCreateTime(Long userId, LocalDateTime createStart, LocalDateTime createEnd, Integer from, Integer size);
 
     void deleteCommentByUser(Long userId, Long commentId);
+
     List<CommentDto> getCommentsByEventIdByAdmin(Long eventId, Integer from, Integer size);
+
     CommentDto getCommentsByIdByAdmin(Long commentId);
+
     void deleteCommentByAdmin(Long commentId);
 }
