@@ -16,7 +16,8 @@ public interface CommentService {
 
     CommentDto getCommentsByIdByUser(Long userId, Long commentId);
 
-    List<CommentDto> getUserCommentsByCreateTime(Long userId, LocalDateTime createStart, LocalDateTime createEnd, Integer from, Integer size);
+    List<CommentDto> getUserCommentsByCreateTime(Long userId, LocalDateTime createStart, LocalDateTime createEnd,
+                                                 Integer from, Integer size);
 
     void deleteCommentByUser(Long userId, Long commentId);
 

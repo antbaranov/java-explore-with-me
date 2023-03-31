@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e2023762-ce8e-4754-a857-8f33c506144a",
+		"_postman_id": "ad51ae2f-62d9-4ee1-af80-79ff4bd7e6c2",
 		"name": "Test Explore With Me - feature_comments",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -54,7 +54,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Событие класс! Мне все понравилось\"\r\n}"
+					"raw": "{\r\n    \"text\": \"Событие 1\"\r\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
@@ -111,9 +111,7 @@
 							"    pm.expect(target.authorName).to.not.be.null;\r",
 							"    pm.expect(target.eventId).to.not.be.null;\r",
 							"    pm.expect(source.text).equal(target.text, 'Текст комментария должен соответствовать отправленному в запросе');\r",
-							"});\r",
-							"\r",
-							""
+							"});"
 						],
 						"type": "text/javascript"
 					}
@@ -130,7 +128,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Событие класс! Мне все понравилось\"\r\n}"
+					"raw": "{\r\n    \"text\": \"Событие 2\"\r\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
@@ -206,7 +204,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Событие класс! Мне все понравилось\"\r\n}"
+					"raw": "{\r\n    \"text\": \"Событие 3\"\r\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/users/:userId/comments/:eventId",
@@ -445,7 +443,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Я передумал, событие не понравилось\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Обновление комментария\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -499,7 +497,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Я передумал, событие не понравилось\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Обновление комментария\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -553,7 +551,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Я передумал, событие не понравилось\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Обновление комментария\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -626,7 +624,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Обновляю формулировку комментария\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Обновление комментария\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
