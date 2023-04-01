@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
     private final EventRepository eventRepository;
     private final CommentMapper commentMapper;
     private final EntityManager entityManager;
-    private final static String COMMENT_WAS_UPD = "Comment with ID = {} was update";
+    public static final String COMMENT_WAS_UPD = "Comment with ID = {} was update";
 
     @Override
     public CommentDto createComment(NewCommentDto newCommentDto, Long userId, Long eventId) {
