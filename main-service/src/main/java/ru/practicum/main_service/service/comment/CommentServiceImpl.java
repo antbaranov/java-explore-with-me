@@ -38,6 +38,7 @@ public class CommentServiceImpl implements CommentService {
     private final EventRepository eventRepository;
     private final CommentMapper commentMapper;
     private final EntityManager entityManager;
+    private final static String COMMENT_WAS_UPD = "Comment with ID = {} was update";
 
     @Override
     public CommentDto createComment(NewCommentDto newCommentDto, Long userId, Long eventId) {
@@ -66,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
         }
         oldComment.setText(newCommentDto.getText());
         Comment savedComment = commentsRepository.save(oldComment);
-        log.debug("Comment with ID = {} was update", commentId);
+        log.debug(COMMENT_WAS_UPD, commentId);
         return commentMapper.toCommentDto(savedComment);
     }
 
@@ -75,7 +76,7 @@ public class CommentServiceImpl implements CommentService {
         Comment oldComment = commentsRepository.findById(commentId).orElseThrow(() -> new CommentNotExistException("Can't update comment, comment doesn't exist"));
         oldComment.setText(newCommentDto.getText());
         Comment savedComment = commentsRepository.save(oldComment);
-        log.debug("Comment with ID = {} was update", commentId);
+        log.debug(COMMENT_WAS_UPD, commentId);
         return commentMapper.toCommentDto(savedComment);
     }
 
